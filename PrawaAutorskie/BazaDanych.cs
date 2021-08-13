@@ -22,6 +22,7 @@ namespace PrawaAutorskie
         private void BazaDanych_FormClosing(object sender, FormClosingEventArgs e)
         {
             principalForm.Enabled = true;
+            principalForm.CheckConn();
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -31,15 +32,15 @@ namespace PrawaAutorskie
 
         public bool CheckSQLConnection(string _connectionstring)
         {
-            string connetionString;
+            try
+            {
+                string connetionString;
             SqlConnection cnn;
             connetionString = _connectionstring;
             cnn = new SqlConnection(connetionString);
-            try
-            {
-                cnn.Open();
-                cnn.Close();
-                return true;
+            cnn.Open();
+            cnn.Close();
+            return true;
             }
             catch
             {
@@ -86,6 +87,16 @@ namespace PrawaAutorskie
             {
                 MessageBox.Show("Backup zakończony sukcesem");
             }
+        }
+
+        private void ZapiszMCS_Click(object sender, EventArgs e)
+        {
+            principalForm.UpdateConfigXML(textBox6.Text, "master");
+        }
+
+        private void ZapiszICS_Click(object sender, EventArgs e)
+        {
+            principalForm.UpdateConfigXML(textBox7.Text, "initial");
         }
     }
 }

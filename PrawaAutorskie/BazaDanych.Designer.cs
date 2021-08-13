@@ -99,6 +99,7 @@ namespace PrawaAutorskie
             this.ZapiszICS.TabIndex = 16;
             this.ZapiszICS.Text = "Zmień";
             this.ZapiszICS.UseVisualStyleBackColor = true;
+            this.ZapiszICS.Click += new System.EventHandler(this.ZapiszICS_Click);
             // 
             // textBox8
             // 
@@ -125,6 +126,7 @@ namespace PrawaAutorskie
             this.ZapiszMCS.TabIndex = 7;
             this.ZapiszMCS.Text = "Zmień";
             this.ZapiszMCS.UseVisualStyleBackColor = true;
+            this.ZapiszMCS.Click += new System.EventHandler(this.ZapiszMCS_Click);
             // 
             // label4
             // 

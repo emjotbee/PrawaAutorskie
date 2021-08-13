@@ -26,7 +26,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.0.7";
+        private string version = "0.0.8";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -63,16 +63,16 @@ namespace PrawaAutorskie
         }
         public bool ExecuteSQLStmt(string sql,string _connectionstring)
         {
-            // Create a connection  
-            conn = new SqlConnection(_connectionstring);
-            if (conn.State == ConnectionState.Open)
-                conn.Close();
-            conn.ConnectionString = _connectionstring;
-            conn.Open();
-            cmd = new SqlCommand(sql, conn);
             try
-            {               
-                int a = cmd.ExecuteNonQuery();
+            {
+                    // Create a connection  
+                    conn = new SqlConnection(_connectionstring);
+                    if (conn.State == ConnectionState.Open)
+                        conn.Close();
+                    conn.ConnectionString = _connectionstring;
+                    conn.Open();
+                    cmd = new SqlCommand(sql, conn);
+                    int a = cmd.ExecuteNonQuery();
                 if (a == 0)
                 {
                     return false;
@@ -82,7 +82,7 @@ namespace PrawaAutorskie
                     return true;
                 }
             }
-            catch (SqlException ae)
+            catch (Exception ae)
             {
                 MessageBox.Show(ae.Message.ToString());
                 return false;
@@ -98,6 +98,7 @@ namespace PrawaAutorskie
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
                 CalculateSzczegoly();
+                FilterFill();
             }
             else
             {
@@ -106,7 +107,6 @@ namespace PrawaAutorskie
                 baza.Show();
                 base.Enabled = false;
             }
-            FilterFill();
         }
 
         private void DodajDzielo_Click(object sender, EventArgs e)
@@ -429,6 +429,84 @@ namespace PrawaAutorskie
 
             }
 
+        }
+        public void UpdateConfigXML(string _connstr,string _switch)
+        {
+            try
+            {
+                Directory.CreateDirectory(dataPath);
+                XmlDocument xmlDocument2 = new XmlDocument();
+                xmlDocument2.LoadXml("<config></config>");
+                XmlElement xmlElement3 = xmlDocument2.CreateElement("connectionstring");
+                XmlAttribute xmlAttribute2 = xmlDocument2.CreateAttribute("InitialCatalog");
+                if(_switch == "initial")
+                {
+                    xmlAttribute2.Value = $@"{_connstr}";
+                    xmlElement3.Attributes.Append(xmlAttribute2);
+                    xmlElement3.InnerText = masterConnectionString;
+                }
+                else
+                {
+                    xmlAttribute2.Value = initialcatalogConnectionString;
+                    xmlElement3.Attributes.Append(xmlAttribute2);
+                    xmlElement3.InnerText = $@"{_connstr}";
+                }
+                xmlDocument2.DocumentElement.AppendChild(xmlElement3);
+                xmlDocument2.PreserveWhitespace = true;
+                xmlDocument2.Save(configFileFullPath);
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(configFileFullPath);
+                XmlNodeList elementsByTagName = xmlDocument.GetElementsByTagName("connectionstring");
+                foreach (XmlElement item in elementsByTagName)
+                {
+
+                    masterConnectionString = item.InnerText;
+                    initialcatalogConnectionString = item.GetAttribute("InitialCatalog");
+                }
+                MessageBox.Show("Plik konfiguracyjny zauktualizowany", "Sukces");
+            }
+            catch
+            {
+                MessageBox.Show("Błąd podczas aktualizacji pliku konfiguracyjnego", "Błąd");
+            }
+        }
+
+        public void CheckConn()
+        {
+            if(!bazad.CheckSQLConnection(masterConnectionString) || !bazad.CheckSQLConnection(initialcatalogConnectionString))
+            {
+                MessageBox.Show("Brak połączenia z bazą danych. Sprawdź poprawność connection stringa", "Błąd");
+                ButtonsEnabled(false);
+            }
+            else if(bazad.CheckSQLConnection(masterConnectionString) && bazad.CheckSQLConnection(initialcatalogConnectionString))
+            {
+                ButtonsEnabled(true);
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+                CalculateSzczegoly();
+                FilterFill();
+            }
+        }
+        void ButtonsEnabled(bool _switch)
+        {
+            if (_switch)
+            {
+                DodajDzielo.Enabled = true;
+                button2.Enabled = true;
+                Pobierz.Enabled = true;
+                Raport.Enabled = true;
+                Zastosuj.Enabled = true;
+                Wyczysc.Enabled = true;
+            }
+            else
+            {
+                DodajDzielo.Enabled = false;
+                button2.Enabled = false;
+                Pobierz.Enabled = false;
+                Raport.Enabled = false;
+                Zastosuj.Enabled = false;
+                Wyczysc.Enabled = false;
+            }
         }
     }
     }
