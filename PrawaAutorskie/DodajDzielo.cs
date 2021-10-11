@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
+using System.Media;
 
 namespace PrawaAutorskie
 {
@@ -47,12 +48,14 @@ namespace PrawaAutorskie
                     }
                     catch (SqlException ae)
                     {
-                        MessageBox.Show(ae.Message.ToString());
+                        SystemSounds.Hand.Play();
+                        MessageBox.Show(ae.Message.ToString(), "Błąd");
                     }
                 }
             }
             catch
             {
+                SystemSounds.Hand.Play();
                 MessageBox.Show("Nie można dodać dzieła", "Błąd");
             }
             
@@ -82,6 +85,7 @@ namespace PrawaAutorskie
                 }
                 catch
                 {
+                    SystemSounds.Hand.Play();
                     MessageBox.Show("Błąd podczas dodawania wniosku", "Błąd");
                 }
             }

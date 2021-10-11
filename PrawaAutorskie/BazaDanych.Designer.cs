@@ -50,17 +50,22 @@ namespace PrawaAutorskie
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ZrobBackup = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.UsunBaze = new System.Windows.Forms.Button();
+            this.OdtworzBaze = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.textBox9 = new System.Windows.Forms.TextBox();
-            this.OdtworzBaze = new System.Windows.Forms.Button();
             this.WyslijRequest = new System.Windows.Forms.Button();
             this.CzytajBaze = new System.Windows.Forms.Button();
-            this.UsunBaze = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -89,7 +94,6 @@ namespace PrawaAutorskie
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Szczegóły";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // ZapiszICS
             // 
@@ -247,15 +251,16 @@ namespace PrawaAutorskie
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.ZrobBackup);
+            this.groupBox2.Controls.Add(this.groupBox3);
+            this.groupBox2.Controls.Add(this.checkBox1);
             this.groupBox2.Controls.Add(this.textBox10);
             this.groupBox2.Controls.Add(this.textBox9);
-            this.groupBox2.Controls.Add(this.OdtworzBaze);
             this.groupBox2.Controls.Add(this.WyslijRequest);
             this.groupBox2.Controls.Add(this.CzytajBaze);
-            this.groupBox2.Controls.Add(this.UsunBaze);
             this.groupBox2.Location = new System.Drawing.Point(13, 276);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(532, 164);
@@ -263,85 +268,131 @@ namespace PrawaAutorskie
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Narzędzia";
             // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Master",
+            "PrawaAutorskie"});
+            this.comboBox1.Location = new System.Drawing.Point(417, 101);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(106, 23);
+            this.comboBox1.TabIndex = 12;
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(7, 125);
+            this.button1.Location = new System.Drawing.Point(134, 27);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 28);
+            this.button1.Size = new System.Drawing.Size(131, 57);
             this.button1.TabIndex = 9;
             this.button1.Text = "Sprawdź poł.";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(108, 91);
+            this.button2.Location = new System.Drawing.Point(404, 27);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(95, 28);
+            this.button2.Size = new System.Drawing.Size(119, 57);
             this.button2.TabIndex = 8;
             this.button2.Text = "Zrób restore";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ZrobBackup
             // 
-            this.ZrobBackup.Location = new System.Drawing.Point(7, 91);
+            this.ZrobBackup.Location = new System.Drawing.Point(271, 27);
             this.ZrobBackup.Name = "ZrobBackup";
-            this.ZrobBackup.Size = new System.Drawing.Size(95, 28);
+            this.ZrobBackup.Size = new System.Drawing.Size(127, 57);
             this.ZrobBackup.TabIndex = 6;
             this.ZrobBackup.Text = "Zrób backup";
             this.ZrobBackup.UseVisualStyleBackColor = true;
             this.ZrobBackup.Click += new System.EventHandler(this.ZrobBackup_Click);
             // 
-            // textBox10
+            // groupBox3
             // 
-            this.textBox10.Location = new System.Drawing.Point(209, 62);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(317, 23);
-            this.textBox10.TabIndex = 5;
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(209, 28);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(317, 23);
-            this.textBox9.TabIndex = 4;
-            // 
-            // OdtworzBaze
-            // 
-            this.OdtworzBaze.Location = new System.Drawing.Point(7, 57);
-            this.OdtworzBaze.Name = "OdtworzBaze";
-            this.OdtworzBaze.Size = new System.Drawing.Size(95, 28);
-            this.OdtworzBaze.TabIndex = 3;
-            this.OdtworzBaze.Text = "Odtwórz bazę";
-            this.OdtworzBaze.UseVisualStyleBackColor = true;
-            // 
-            // WyslijRequest
-            // 
-            this.WyslijRequest.Enabled = false;
-            this.WyslijRequest.Location = new System.Drawing.Point(108, 23);
-            this.WyslijRequest.Name = "WyslijRequest";
-            this.WyslijRequest.Size = new System.Drawing.Size(95, 28);
-            this.WyslijRequest.TabIndex = 2;
-            this.WyslijRequest.Text = "Wyślij request";
-            this.WyslijRequest.UseVisualStyleBackColor = true;
-            // 
-            // CzytajBaze
-            // 
-            this.CzytajBaze.Enabled = false;
-            this.CzytajBaze.Location = new System.Drawing.Point(108, 57);
-            this.CzytajBaze.Name = "CzytajBaze";
-            this.CzytajBaze.Size = new System.Drawing.Size(95, 28);
-            this.CzytajBaze.TabIndex = 1;
-            this.CzytajBaze.Text = "Czytaj z bazy";
-            this.CzytajBaze.UseVisualStyleBackColor = true;
+            this.groupBox3.Controls.Add(this.UsunBaze);
+            this.groupBox3.Controls.Add(this.OdtworzBaze);
+            this.groupBox3.Location = new System.Drawing.Point(21, 15);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(107, 75);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
             // 
             // UsunBaze
             // 
-            this.UsunBaze.Location = new System.Drawing.Point(7, 23);
+            this.UsunBaze.Enabled = false;
+            this.UsunBaze.Location = new System.Drawing.Point(6, 12);
             this.UsunBaze.Name = "UsunBaze";
             this.UsunBaze.Size = new System.Drawing.Size(95, 28);
             this.UsunBaze.TabIndex = 0;
             this.UsunBaze.Text = "Usuń bazę";
             this.UsunBaze.UseVisualStyleBackColor = true;
+            this.UsunBaze.Click += new System.EventHandler(this.UsunBaze_Click);
+            // 
+            // OdtworzBaze
+            // 
+            this.OdtworzBaze.Enabled = false;
+            this.OdtworzBaze.Location = new System.Drawing.Point(6, 41);
+            this.OdtworzBaze.Name = "OdtworzBaze";
+            this.OdtworzBaze.Size = new System.Drawing.Size(95, 28);
+            this.OdtworzBaze.TabIndex = 3;
+            this.OdtworzBaze.Text = "Odtwórz bazę";
+            this.OdtworzBaze.UseVisualStyleBackColor = true;
+            this.OdtworzBaze.Click += new System.EventHandler(this.OdtworzBaze_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(7, 22);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(15, 14);
+            this.checkBox1.TabIndex = 10;
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(121, 129);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(402, 23);
+            this.textBox10.TabIndex = 5;
+            this.textBox10.Enter += new System.EventHandler(this.textBox10_Enter);
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(121, 101);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(290, 23);
+            this.textBox9.TabIndex = 4;
+            this.textBox9.Enter += new System.EventHandler(this.textBox9_Enter);
+            // 
+            // WyslijRequest
+            // 
+            this.WyslijRequest.Enabled = false;
+            this.WyslijRequest.Location = new System.Drawing.Point(21, 96);
+            this.WyslijRequest.Name = "WyslijRequest";
+            this.WyslijRequest.Size = new System.Drawing.Size(95, 28);
+            this.WyslijRequest.TabIndex = 2;
+            this.WyslijRequest.Text = "Wyślij request";
+            this.WyslijRequest.UseVisualStyleBackColor = true;
+            this.WyslijRequest.Click += new System.EventHandler(this.WyslijRequest_Click);
+            // 
+            // CzytajBaze
+            // 
+            this.CzytajBaze.Enabled = false;
+            this.CzytajBaze.Location = new System.Drawing.Point(21, 125);
+            this.CzytajBaze.Name = "CzytajBaze";
+            this.CzytajBaze.Size = new System.Drawing.Size(95, 28);
+            this.CzytajBaze.TabIndex = 1;
+            this.CzytajBaze.Text = "Czytaj z bazy";
+            this.CzytajBaze.UseVisualStyleBackColor = true;
+            this.CzytajBaze.Click += new System.EventHandler(this.CzytajBaze_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // BazaDanych
             // 
@@ -361,6 +412,7 @@ namespace PrawaAutorskie
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -385,10 +437,7 @@ namespace PrawaAutorskie
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button ZapiszMCS;
-        private System.Windows.Forms.Button ZrobBackup;
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Button OdtworzBaze;
@@ -396,5 +445,12 @@ namespace PrawaAutorskie
         private System.Windows.Forms.Button CzytajBaze;
         private System.Windows.Forms.Button UsunBaze;
         private System.Windows.Forms.Button ZapiszICS;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button ZrobBackup;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

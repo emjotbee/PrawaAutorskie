@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using System.Collections;
 using System.IO;
 using System.Xml;
 using System.Media;
-using System.Runtime.InteropServices;
 using DataTable = System.Data.DataTable;
-using System.Reflection;
 using ClosedXML.Excel;
+using System.Collections.Generic;
 
 namespace PrawaAutorskie
 {
@@ -26,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.0.8";
+        private string version = "0.0.9";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -36,8 +28,9 @@ namespace PrawaAutorskie
             InitializeComponent();
             Text = "PrawaAutorskie " + version + " ©2021 Kamil Kłonica";
         }       
-        public void PrepareDatabase(string connectionString, string dbName)
+        public bool PrepareDatabase(string connectionString, string dbName)
         {
+            int a = 0;
             Directory.CreateDirectory($"C:\\{dbName}");
             SqlCommand cmd = null;
             using (var connection = new SqlConnection(connectionString))
@@ -47,7 +40,7 @@ namespace PrawaAutorskie
                 connection.Open();
                 using (cmd = new SqlCommand($"If(db_id(N'{dbName}') IS NULL) CREATE DATABASE [{dbName}] ON PRIMARY" + $"(Name={dbName}, filename = 'C:\\{dbName}\\{dbName}.mdf', size=50," + "maxsize=100, filegrowth=10%)log on" + $"(name={dbName}_log, filename='C:\\{dbName}\\{dbName}.ldf',size=3," + "maxsize=20,filegrowth=1)", connection))
                 {
-                        cmd.ExecuteNonQuery();
+                        a = cmd.ExecuteNonQuery();
                         connection.ChangeDatabase("PrawaAutorskie");
                         using (cmd = new SqlCommand("IF OBJECT_ID (N'ListaDziel', N'U') IS NULL CREATE TABLE ListaDziel" + "(Id UNIQUEIDENTIFIER PRIMARY KEY default NEWID()," + "Tytuł VARCHAR(255), Opis TEXT, Czas INTEGER, Data DATE, PlikDirect VARBINARY(MAX), Plik VARCHAR(255))", connection))
                         {
@@ -57,12 +50,22 @@ namespace PrawaAutorskie
                 }
                 catch (SqlException ae)
                 {
-                    MessageBox.Show(ae.Message.ToString());
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show(ae.Message.ToString(), "Błąd");
                 }
+            }
+            if(a == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         public bool ExecuteSQLStmt(string sql,string _connectionstring)
         {
+            Cursor.Current = Cursors.WaitCursor;
             try
             {
                     // Create a connection  
@@ -75,16 +78,20 @@ namespace PrawaAutorskie
                     int a = cmd.ExecuteNonQuery();
                 if (a == 0)
                 {
+                    Cursor.Current = Cursors.Default;
                     return false;
                 }
                 else
                 {
+                    Cursor.Current = Cursors.Default;
                     return true;
                 }
             }
             catch (Exception ae)
             {
-                MessageBox.Show(ae.Message.ToString());
+                SystemSounds.Beep.Play();
+                MessageBox.Show(ae.Message.ToString(), "Błąd");
+                Cursor.Current = Cursors.Default;
                 return false;
             }
         }
@@ -102,6 +109,7 @@ namespace PrawaAutorskie
             }
             else
             {
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Brak połączenia z bazą danych. Sprawdź poprawność connection stringa", "Błąd");
                 BazaDanych baza = new BazaDanych();
                 baza.Show();
@@ -140,14 +148,13 @@ namespace PrawaAutorskie
             //Declare the SqlDataReader
             SqlDataReader rdr = null;
             string field1 = null;
-            //Create connection
-            SqlConnection conn = new SqlConnection(_connection);
-
-            //Create command
-            SqlCommand cmd = new SqlCommand(_statement, conn);
-
             try
             {
+                //Create connection
+                SqlConnection conn = new SqlConnection(_connection);
+
+                //Create command
+                SqlCommand cmd = new SqlCommand(_statement, conn);
                 //Open the connection
                 conn.Open();
 
@@ -173,7 +180,7 @@ namespace PrawaAutorskie
                 }
                 return field1;
             }
-            catch (SqlException ae)
+            catch (Exception ae)
             {
                 // 3. close the reader
                 if (rdr != null)
@@ -231,6 +238,7 @@ namespace PrawaAutorskie
             }
             catch
             {
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Brak urlopu do usunięcia", "Błąd");
             }
         }
@@ -277,6 +285,7 @@ namespace PrawaAutorskie
             }
             catch
             {
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Błąd podczas tworzenia pliku konfiguracyjnego", "Błąd");
             }
         }
@@ -293,12 +302,14 @@ namespace PrawaAutorskie
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
                         databaseFileRead(num.ToString(), Path.Combine(dlg.SelectedPath, dataGridView1.Rows[rowIndex].Cells[5].Value.ToString()));
-                        MessageBox.Show("Plik zapisany pomyślnie");
+                        SystemSounds.Hand.Play();
+                        MessageBox.Show("Plik zapisany pomyślnie", "Sukces");
                     }
                 }
             }
             catch
             {
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Nie można zapisać pliku", "Błąd");
             }
         }
@@ -345,13 +356,15 @@ namespace PrawaAutorskie
                 // Create DataSet, fill it and view in data grid  
                 DataSet ds = new DataSet("ListaDziel");
                 da.Fill(ds, "ListaDziel");
+                List<int> list = new List<int>();
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     DateTime date = (DateTime)row["Data"];
-                    if (!comboBox1.Items.Contains(date.Month.ToString()))
+                    if (!list.Contains(Convert.ToInt32(date.Month)))
                     {
-                        comboBox1.Items.Add(date.Month.ToString());
-                    }
+
+                        list.Add(Convert.ToInt32(date.Month));
+                    }                   
                     string typPliku = (string)row["Plik"];
                     string last3c = typPliku.Substring(typPliku.LastIndexOf("."));
                     if (!comboBox2.Items.Contains(last3c))
@@ -359,9 +372,15 @@ namespace PrawaAutorskie
                         comboBox2.Items.Add(last3c);
                     }
                 }
+                list.Sort();
+                foreach (int item in list)
+                {
+                    comboBox1.Items.Add(item);
+                }
             }
             catch
             {
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Nie załadować listy", "Błąd");
             }
         }
@@ -416,17 +435,18 @@ namespace PrawaAutorskie
                             {
                                 databaseFileRead(dataGridView1.Rows[row.Index].Cells[0].Value.ToString(), Path.Combine(dlg.SelectedPath, dataGridView1.Rows[row.Index].Cells[4].Value.ToString()));
                             }
-                            MessageBox.Show("Pliki zapisane pomyślnie");
+                            SystemSounds.Hand.Play();
+                            MessageBox.Show("Pliki zapisane pomyślnie", "Sukces");
                             Cursor.Current = Cursors.Default;
                         }
                     }
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show(ex.Message.ToString());
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show(ex.Message.ToString(), "Błąd");
                     Cursor.Current = Cursors.Default;
                 }
-
             }
 
         }
@@ -463,10 +483,13 @@ namespace PrawaAutorskie
                     masterConnectionString = item.InnerText;
                     initialcatalogConnectionString = item.GetAttribute("InitialCatalog");
                 }
+                SystemSounds.Hand.Play();
                 MessageBox.Show("Plik konfiguracyjny zauktualizowany", "Sukces");
             }
             catch
             {
+
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Błąd podczas aktualizacji pliku konfiguracyjnego", "Błąd");
             }
         }
@@ -475,6 +498,7 @@ namespace PrawaAutorskie
         {
             if(!bazad.CheckSQLConnection(masterConnectionString) || !bazad.CheckSQLConnection(initialcatalogConnectionString))
             {
+                SystemSounds.Beep.Play();
                 MessageBox.Show("Brak połączenia z bazą danych. Sprawdź poprawność connection stringa", "Błąd");
                 ButtonsEnabled(false);
             }

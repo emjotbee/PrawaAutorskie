@@ -152,8 +152,7 @@ namespace PrawaAutorskie
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(59, 22);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(30, 23);
-            this.comboBox1.Sorted = true;
+            this.comboBox1.Size = new System.Drawing.Size(42, 23);
             this.comboBox1.TabIndex = 12;
             // 
             // label5
