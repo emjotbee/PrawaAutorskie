@@ -141,7 +141,6 @@ namespace PrawaAutorskie
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //RESTORE DATABASE [PrawaAutorskie] FROM  DISK = N'C:\PrawaAutorskie\PrawaAutorskie27092021_2.bak' WITH  FILE = 1,  NOUNLOAD,  STATS = 5
             try
             {
                 openFileDialog1.FileName = "";

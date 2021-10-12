@@ -18,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.0.9";
+        private string version = "0.1.0";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -395,6 +395,7 @@ namespace PrawaAutorskie
 
         private void Zastosuj_Click(object sender, EventArgs e)
         {
+            //MessageBox.Show(GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked));
             string m;
             string p;
             if (comboBox1.SelectedIndex > -1)
@@ -403,7 +404,7 @@ namespace PrawaAutorskie
             }
             else
             {
-                m = DateTime.Now.Month.ToString();
+                m = "brak";
             }
             if (comboBox2.SelectedIndex > -1)
             {
@@ -413,13 +414,41 @@ namespace PrawaAutorskie
             {
                 p = "";
             }
-            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{m}-01' AND Data < '{DateTime.Now.Year}-{m}-{DateTime.DaysInMonth(DateTime.Now.Year, Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+            if (m == "brak")
+            {
+                if(textBox5.Text != "Szukaj w bazie danych bez filtrów")
+                {
+                    comboBox1.SelectedIndex = -1;
+                    comboBox2.SelectedIndex = -1;
+                    if(!checkBox1.Checked && !checkBox2.Checked && !checkBox3.Checked)
+                    {
+                        SystemSounds.Beep.Play();
+                        MessageBox.Show("Przynajmniej jeden obszar wyszukiwania musi być zaznaczony", "Błąd");
+                    }
+                    else
+                    {
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE {GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked)}");
+                    }
+                }
+                else
+                {
+                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Plik LIKE '%{p}%'");
+                }
+            }
+            else
+            {
+                LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{m}-01' AND Data < '{DateTime.Now.Year}-{m}-{DateTime.DaysInMonth(DateTime.Now.Year, Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+            }
         }
 
         private void Wyczysc_Click(object sender, EventArgs e)
         {
             comboBox1.SelectedIndex = -1;
             comboBox2.SelectedIndex = -1;
+            checkBox1.Checked = true;
+            checkBox2.Checked = true;
+            checkBox3.Checked = true;
+            textBox5.Text = "Szukaj w bazie danych bez filtrów";
             LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
         }
 
@@ -492,7 +521,7 @@ namespace PrawaAutorskie
                     initialcatalogConnectionString = item.GetAttribute("InitialCatalog");
                 }
                 SystemSounds.Hand.Play();
-                MessageBox.Show("Plik konfiguracyjny zauktualizowany", "Sukces");
+                MessageBox.Show("Plik konfiguracyjny zaktualizowany", "Sukces");
             }
             catch
             {
@@ -540,6 +569,98 @@ namespace PrawaAutorskie
                 Wyczysc.Enabled = false;
             }
         }
-    }
-    }
+        string GetDbSearch(bool _tytul, bool _opis, bool _plik)
+        {
+            string _OrAnd(bool _tytul, bool _opis, bool _plik, string _switch)
+            {
+                switch (_switch)
+                {
+                    case "OR":
+                        if (!_tytul || !_opis)
+                        {
+                            return "";
+                        }
+                        else if (!_opis && _tytul)
+                        {
+                            return "";
+                        }
+                        else { return "OR"; }
 
+                    case "OR2":
+                        if (!_plik)
+                        {
+                            return "";
+                        }
+                        else if (!_tytul && !_opis)
+                        {
+                            return "";
+                        }
+                        else
+                        {
+                            return "OR";
+                        }
+                    default: return "default";
+                }                
+            }
+            string t;
+            string o;
+            string p;
+            if (_tytul)
+            {
+                t = $"Tytuł LIKE '%{textBox5.Text}%'";
+            }
+            else
+            {
+                t = "";
+            }
+            if (_opis)
+            {
+                o = $"Opis LIKE '%{textBox5.Text}%'";
+            }
+            else
+            {
+                o = "";
+            }
+            if (_plik)
+            {
+                p = $"Plik LIKE '%{textBox5.Text}%'";
+            }
+            else
+            {
+             p = "";
+            }
+            string query = $"{t} {_OrAnd(_tytul, _opis, _plik, "OR")} {o} {_OrAnd(_tytul, _opis, _plik, "OR2")} {p}";
+            return query;
+        }
+
+        private void textBox5_Enter(object sender, EventArgs e)
+        {
+            ResetSearch("Filters");
+        }
+        void ResetSearch(string _switch)
+        {
+            if(_switch == "Search")
+            {
+                checkBox1.Checked = true;
+                checkBox2.Checked = true;
+                checkBox3.Checked = true;
+                textBox5.Text = "Szukaj w bazie danych bez filtrów";
+            }
+            else
+            {
+                comboBox1.SelectedIndex = -1;
+                comboBox2.SelectedIndex = -1;
+            }
+        }
+
+        private void comboBox1_Click(object sender, EventArgs e)
+        {
+            ResetSearch("Search");
+        }
+
+        private void comboBox2_Click(object sender, EventArgs e)
+        {
+            ResetSearch("Search");
+        }
+    }
+    }

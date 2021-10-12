@@ -35,6 +35,10 @@ namespace PrawaAutorskie
             this.Narzedzia = new System.Windows.Forms.GroupBox();
             this.Raport = new System.Windows.Forms.Button();
             this.Filtry = new System.Windows.Forms.GroupBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -70,7 +74,7 @@ namespace PrawaAutorskie
             this.Lista.Controls.Add(this.dataGridView1);
             this.Lista.Location = new System.Drawing.Point(12, 27);
             this.Lista.Name = "Lista";
-            this.Lista.Size = new System.Drawing.Size(686, 411);
+            this.Lista.Size = new System.Drawing.Size(686, 426);
             this.Lista.TabIndex = 0;
             this.Lista.TabStop = false;
             this.Lista.Text = "Lista";
@@ -84,19 +88,25 @@ namespace PrawaAutorskie
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(674, 383);
+            this.dataGridView1.Size = new System.Drawing.Size(674, 389);
             this.dataGridView1.TabIndex = 0;
             // 
             // Narzedzia
             // 
+            this.Narzedzia.Controls.Add(this.checkBox3);
             this.Narzedzia.Controls.Add(this.Raport);
             this.Narzedzia.Controls.Add(this.Filtry);
+            this.Narzedzia.Controls.Add(this.checkBox2);
             this.Narzedzia.Controls.Add(this.Pobierz);
             this.Narzedzia.Controls.Add(this.button2);
+            this.Narzedzia.Controls.Add(this.checkBox1);
             this.Narzedzia.Controls.Add(this.DodajDzielo);
+            this.Narzedzia.Controls.Add(this.textBox5);
+            this.Narzedzia.Controls.Add(this.Wyczysc);
+            this.Narzedzia.Controls.Add(this.Zastosuj);
             this.Narzedzia.Location = new System.Drawing.Point(704, 170);
             this.Narzedzia.Name = "Narzedzia";
-            this.Narzedzia.Size = new System.Drawing.Size(303, 268);
+            this.Narzedzia.Size = new System.Drawing.Size(303, 283);
             this.Narzedzia.TabIndex = 2;
             this.Narzedzia.TabStop = false;
             this.Narzedzia.Text = "Narzędzia";
@@ -117,30 +127,74 @@ namespace PrawaAutorskie
             this.Filtry.Controls.Add(this.label6);
             this.Filtry.Controls.Add(this.comboBox1);
             this.Filtry.Controls.Add(this.label5);
-            this.Filtry.Controls.Add(this.Wyczysc);
-            this.Filtry.Controls.Add(this.Zastosuj);
             this.Filtry.Location = new System.Drawing.Point(6, 123);
             this.Filtry.Name = "Filtry";
-            this.Filtry.Size = new System.Drawing.Size(290, 139);
+            this.Filtry.Size = new System.Drawing.Size(290, 63);
             this.Filtry.TabIndex = 8;
             this.Filtry.TabStop = false;
             this.Filtry.Text = "Filtry";
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Location = new System.Drawing.Point(119, 221);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(45, 19);
+            this.checkBox3.TabIndex = 18;
+            this.checkBox3.Text = "Plik";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Location = new System.Drawing.Point(63, 221);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(50, 19);
+            this.checkBox2.TabIndex = 17;
+            this.checkBox2.Text = "Opis";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(6, 221);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(51, 19);
+            this.checkBox1.TabIndex = 16;
+            this.checkBox1.Text = "Tytuł";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(7, 192);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(289, 23);
+            this.textBox5.TabIndex = 15;
+            this.textBox5.Text = "Szukaj w bazie danych bez filtrów";
+            this.textBox5.Enter += new System.EventHandler(this.textBox5_Enter);
             // 
             // comboBox2
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(166, 22);
+            this.comboBox2.Location = new System.Drawing.Point(172, 22);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(51, 23);
+            this.comboBox2.Size = new System.Drawing.Size(55, 23);
             this.comboBox2.Sorted = true;
             this.comboBox2.TabIndex = 14;
+            this.comboBox2.Click += new System.EventHandler(this.comboBox2_Click);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(107, 28);
+            this.label6.Location = new System.Drawing.Point(112, 28);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(54, 15);
             this.label6.TabIndex = 13;
@@ -154,6 +208,7 @@ namespace PrawaAutorskie
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(42, 23);
             this.comboBox1.TabIndex = 12;
+            this.comboBox1.Click += new System.EventHandler(this.comboBox1_Click);
             // 
             // label5
             // 
@@ -167,9 +222,9 @@ namespace PrawaAutorskie
             // 
             // Wyczysc
             // 
-            this.Wyczysc.Location = new System.Drawing.Point(149, 105);
+            this.Wyczysc.Location = new System.Drawing.Point(149, 246);
             this.Wyczysc.Name = "Wyczysc";
-            this.Wyczysc.Size = new System.Drawing.Size(135, 29);
+            this.Wyczysc.Size = new System.Drawing.Size(148, 29);
             this.Wyczysc.TabIndex = 10;
             this.Wyczysc.Text = "Wyczyść";
             this.Wyczysc.UseVisualStyleBackColor = true;
@@ -177,7 +232,7 @@ namespace PrawaAutorskie
             // 
             // Zastosuj
             // 
-            this.Zastosuj.Location = new System.Drawing.Point(8, 105);
+            this.Zastosuj.Location = new System.Drawing.Point(6, 246);
             this.Zastosuj.Name = "Zastosuj";
             this.Zastosuj.Size = new System.Drawing.Size(135, 29);
             this.Zastosuj.TabIndex = 9;
@@ -325,7 +380,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 450);
+            this.ClientSize = new System.Drawing.Size(1019, 456);
             this.Controls.Add(this.Szczegoly);
             this.Controls.Add(this.Narzedzia);
             this.Controls.Add(this.Lista);
@@ -339,6 +394,7 @@ namespace PrawaAutorskie
             this.Lista.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.Narzedzia.ResumeLayout(false);
+            this.Narzedzia.PerformLayout();
             this.Filtry.ResumeLayout(false);
             this.Filtry.PerformLayout();
             this.Szczegoly.ResumeLayout(false);
@@ -379,6 +435,10 @@ namespace PrawaAutorskie
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button Raport;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox textBox5;
     }
 }
 
