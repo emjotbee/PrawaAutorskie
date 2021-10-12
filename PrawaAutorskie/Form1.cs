@@ -223,23 +223,30 @@ namespace PrawaAutorskie
 
         private void button2_Click(object sender, EventArgs e)
         {
-            RemoveUrlop();
+            RemoveDzielo();
             LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
             CalculateSzczegoly();
             FilterFill();
         }
-        public void RemoveUrlop()
+        public void RemoveDzielo()
         {
             try
             {
-                int rowIndex = dataGridView1.CurrentCell.RowIndex;
-                Guid num = (Guid)dataGridView1.Rows[rowIndex].Cells[0].Value;
-                ExecuteSQLStmt($"DELETE FROM ListaDziel WHERE Id = '{num}'", initialcatalogConnectionString);
+                if(dataGridView1.CurrentCell != null)
+                {
+                    int _rowIndex = dataGridView1.CurrentCell.RowIndex;
+                    Guid num = (Guid)dataGridView1.Rows[_rowIndex].Cells[0].Value;
+                    ExecuteSQLStmt($"DELETE FROM ListaDziel WHERE Id = '{num}'", initialcatalogConnectionString);
+                }
+                else
+                {
+                    throw new Exception();
+                }
             }
             catch
             {
                 SystemSounds.Beep.Play();
-                MessageBox.Show("Brak urlopu do usunięcia", "Błąd");
+                MessageBox.Show("Brak dzeła do usunięcia", "Błąd");
             }
         }
 
@@ -373,6 +380,7 @@ namespace PrawaAutorskie
                     }
                 }
                 list.Sort();
+                comboBox1.Items.Clear();
                 foreach (int item in list)
                 {
                     comboBox1.Items.Add(item);
