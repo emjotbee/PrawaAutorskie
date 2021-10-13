@@ -684,9 +684,7 @@ namespace PrawaAutorskie
             }
             else
             {
-                comboBox1.SelectedIndex = -1;
-                comboBox2.SelectedIndex = -1;
-                comboBox3.SelectedIndex = -1;
+                FilterFill(DateTime.Now.Year, true);
             }
         }
 
