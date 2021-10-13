@@ -33,21 +33,21 @@ namespace PrawaAutorskie
             this.Lista = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Narzedzia = new System.Windows.Forms.GroupBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.Raport = new System.Windows.Forms.Button();
             this.Filtry = new System.Windows.Forms.GroupBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.Wyczysc = new System.Windows.Forms.Button();
-            this.Zastosuj = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.Pobierz = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.DodajDzielo = new System.Windows.Forms.Button();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.Wyczysc = new System.Windows.Forms.Button();
+            this.Zastosuj = new System.Windows.Forms.Button();
             this.Szczegoly = new System.Windows.Forms.GroupBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -88,7 +88,7 @@ namespace PrawaAutorskie
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(674, 389);
+            this.dataGridView1.Size = new System.Drawing.Size(674, 396);
             this.dataGridView1.TabIndex = 0;
             // 
             // Narzedzia
@@ -110,6 +110,18 @@ namespace PrawaAutorskie
             this.Narzedzia.TabIndex = 2;
             this.Narzedzia.TabStop = false;
             this.Narzedzia.Text = "Narzędzia";
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Location = new System.Drawing.Point(119, 221);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(45, 19);
+            this.checkBox3.TabIndex = 18;
+            this.checkBox3.Text = "Plik";
+            this.checkBox3.UseVisualStyleBackColor = true;
             // 
             // Raport
             // 
@@ -133,51 +145,6 @@ namespace PrawaAutorskie
             this.Filtry.TabIndex = 8;
             this.Filtry.TabStop = false;
             this.Filtry.Text = "Filtry";
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(119, 221);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(45, 19);
-            this.checkBox3.TabIndex = 18;
-            this.checkBox3.Text = "Plik";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(63, 221);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(50, 19);
-            this.checkBox2.TabIndex = 17;
-            this.checkBox2.Text = "Opis";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(6, 221);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(51, 19);
-            this.checkBox1.TabIndex = 16;
-            this.checkBox1.Text = "Tytuł";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(7, 192);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(289, 23);
-            this.textBox5.TabIndex = 15;
-            this.textBox5.Text = "Szukaj w bazie danych bez filtrów";
-            this.textBox5.Enter += new System.EventHandler(this.textBox5_Enter);
             // 
             // comboBox2
             // 
@@ -220,25 +187,17 @@ namespace PrawaAutorskie
             this.label5.TabIndex = 11;
             this.label5.Text = "Miesiąc";
             // 
-            // Wyczysc
+            // checkBox2
             // 
-            this.Wyczysc.Location = new System.Drawing.Point(149, 246);
-            this.Wyczysc.Name = "Wyczysc";
-            this.Wyczysc.Size = new System.Drawing.Size(148, 29);
-            this.Wyczysc.TabIndex = 10;
-            this.Wyczysc.Text = "Wyczyść";
-            this.Wyczysc.UseVisualStyleBackColor = true;
-            this.Wyczysc.Click += new System.EventHandler(this.Wyczysc_Click);
-            // 
-            // Zastosuj
-            // 
-            this.Zastosuj.Location = new System.Drawing.Point(6, 246);
-            this.Zastosuj.Name = "Zastosuj";
-            this.Zastosuj.Size = new System.Drawing.Size(135, 29);
-            this.Zastosuj.TabIndex = 9;
-            this.Zastosuj.Text = "Zastosuj";
-            this.Zastosuj.UseVisualStyleBackColor = true;
-            this.Zastosuj.Click += new System.EventHandler(this.Zastosuj_Click);
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Location = new System.Drawing.Point(63, 221);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(50, 19);
+            this.checkBox2.TabIndex = 17;
+            this.checkBox2.Text = "Opis";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // Pobierz
             // 
@@ -260,6 +219,18 @@ namespace PrawaAutorskie
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(6, 221);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(51, 19);
+            this.checkBox1.TabIndex = 16;
+            this.checkBox1.Text = "Tytuł";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // DodajDzielo
             // 
             this.DodajDzielo.Location = new System.Drawing.Point(6, 22);
@@ -269,6 +240,35 @@ namespace PrawaAutorskie
             this.DodajDzielo.Text = "Dodaj dzieło";
             this.DodajDzielo.UseVisualStyleBackColor = true;
             this.DodajDzielo.Click += new System.EventHandler(this.DodajDzielo_Click);
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(7, 192);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(289, 23);
+            this.textBox5.TabIndex = 15;
+            this.textBox5.Text = "Szukaj w bazie danych bez filtrów";
+            this.textBox5.Enter += new System.EventHandler(this.textBox5_Enter);
+            // 
+            // Wyczysc
+            // 
+            this.Wyczysc.Location = new System.Drawing.Point(149, 246);
+            this.Wyczysc.Name = "Wyczysc";
+            this.Wyczysc.Size = new System.Drawing.Size(148, 29);
+            this.Wyczysc.TabIndex = 10;
+            this.Wyczysc.Text = "Wyczyść";
+            this.Wyczysc.UseVisualStyleBackColor = true;
+            this.Wyczysc.Click += new System.EventHandler(this.Wyczysc_Click);
+            // 
+            // Zastosuj
+            // 
+            this.Zastosuj.Location = new System.Drawing.Point(6, 246);
+            this.Zastosuj.Name = "Zastosuj";
+            this.Zastosuj.Size = new System.Drawing.Size(135, 29);
+            this.Zastosuj.TabIndex = 9;
+            this.Zastosuj.Text = "Zastosuj";
+            this.Zastosuj.UseVisualStyleBackColor = true;
+            this.Zastosuj.Click += new System.EventHandler(this.Zastosuj_Click);
             // 
             // Szczegoly
             // 

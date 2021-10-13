@@ -364,6 +364,7 @@ namespace PrawaAutorskie
                 DataSet ds = new DataSet("ListaDziel");
                 da.Fill(ds, "ListaDziel");
                 List<int> list = new List<int>();
+                comboBox2.Items.Clear();
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     DateTime date = (DateTime)row["Data"];
@@ -546,6 +547,8 @@ namespace PrawaAutorskie
                 LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
                 CalculateSzczegoly();
                 FilterFill();
+                ResetSearch("Search");
+                ResetSearch("Filters");
             }
         }
         void ButtonsEnabled(bool _switch)
