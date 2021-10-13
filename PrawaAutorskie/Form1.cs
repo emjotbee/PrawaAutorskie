@@ -18,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.0";
+        private string version = "0.1.1";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -105,7 +105,7 @@ namespace PrawaAutorskie
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
                 CalculateSzczegoly();
-                FilterFill();
+                FilterFill(DateTime.Now.Year,true);
             }
             else
             {
@@ -226,7 +226,7 @@ namespace PrawaAutorskie
             RemoveDzielo();
             LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
             CalculateSzczegoly();
-            FilterFill();
+            FilterFill(DateTime.Now.Year,true);
         }
         public void RemoveDzielo()
         {
@@ -346,7 +346,7 @@ namespace PrawaAutorskie
             base.Enabled = false;
         }
 
-        public void FilterFill()
+        public void FilterFill(int _year,bool _yearchange)
         {
             try
             {
@@ -364,27 +364,42 @@ namespace PrawaAutorskie
                 DataSet ds = new DataSet("ListaDziel");
                 da.Fill(ds, "ListaDziel");
                 List<int> list = new List<int>();
+                List<int> list2 = new List<int>();
                 comboBox2.Items.Clear();
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     DateTime date = (DateTime)row["Data"];
-                    if (!list.Contains(Convert.ToInt32(date.Month)))
+                    if (!list.Contains(Convert.ToInt32(date.Month)) && date.Year == _year)
                     {
 
                         list.Add(Convert.ToInt32(date.Month));
-                    }                   
+                    }
+                    if (!list2.Contains(Convert.ToInt32(date.Year)))
+                    {
+
+                        list2.Add(Convert.ToInt32(date.Year));
+                    }
                     string typPliku = (string)row["Plik"];
                     string last3c = typPliku.Substring(typPliku.LastIndexOf("."));
-                    if (!comboBox2.Items.Contains(last3c))
+                    if (!comboBox2.Items.Contains(last3c) && date.Year == _year)
                     {
                         comboBox2.Items.Add(last3c);
                     }
                 }
                 list.Sort();
-                comboBox1.Items.Clear();
+                comboBox1.Items.Clear();                
                 foreach (int item in list)
                 {
                     comboBox1.Items.Add(item);
+                }
+                if (_yearchange)
+                {
+                    list2.Sort();
+                    comboBox3.Items.Clear();
+                    foreach (int item in list2)
+                    {
+                        comboBox3.Items.Add(item);
+                    }
                 }
             }
             catch
@@ -399,6 +414,15 @@ namespace PrawaAutorskie
             //MessageBox.Show(GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked));
             string m;
             string p;
+            string r;
+            if (comboBox3.SelectedIndex > -1)
+            {
+                r = comboBox3.SelectedItem.ToString();
+            }
+            else
+            {
+                r = DateTime.Now.Year.ToString();
+            }
             if (comboBox1.SelectedIndex > -1)
             {
                 m = comboBox1.SelectedItem.ToString();
@@ -415,7 +439,7 @@ namespace PrawaAutorskie
             {
                 p = "";
             }
-            if (m == "brak")
+            if (m == "brak" && comboBox3.SelectedIndex == -1)
             {
                 if(textBox5.Text != "Szukaj w bazie danych bez filtrów")
                 {
@@ -438,7 +462,14 @@ namespace PrawaAutorskie
             }
             else
             {
-                LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{m}-01' AND Data < '{DateTime.Now.Year}-{m}-{DateTime.DaysInMonth(DateTime.Now.Year, Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+                if(m == "brak")
+                {
+                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data < '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(1))}' AND Plik LIKE '%{p}%'");
+                }
+                else
+                {
+                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data < '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+                }       
             }
         }
 
@@ -446,11 +477,13 @@ namespace PrawaAutorskie
         {
             comboBox1.SelectedIndex = -1;
             comboBox2.SelectedIndex = -1;
+            comboBox3.SelectedIndex = -1;
             checkBox1.Checked = true;
             checkBox2.Checked = true;
             checkBox3.Checked = true;
             textBox5.Text = "Szukaj w bazie danych bez filtrów";
             LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+            FilterFill(DateTime.Now.Year, true);
         }
 
 
@@ -546,7 +579,7 @@ namespace PrawaAutorskie
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
                 CalculateSzczegoly();
-                FilterFill();
+                FilterFill(DateTime.Now.Year, true);
                 ResetSearch("Search");
                 ResetSearch("Filters");
             }
@@ -653,6 +686,7 @@ namespace PrawaAutorskie
             {
                 comboBox1.SelectedIndex = -1;
                 comboBox2.SelectedIndex = -1;
+                comboBox3.SelectedIndex = -1;
             }
         }
 
@@ -664,6 +698,16 @@ namespace PrawaAutorskie
         private void comboBox2_Click(object sender, EventArgs e)
         {
             ResetSearch("Search");
+        }
+
+        private void comboBox3_Click(object sender, EventArgs e)
+        {
+            ResetSearch("Search");
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterFill(Convert.ToInt32(comboBox3.SelectedItem), false);
         }
     }
     }

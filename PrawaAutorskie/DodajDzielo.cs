@@ -66,7 +66,7 @@ namespace PrawaAutorskie
             AddItem();
             principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
             principalForm.CalculateSzczegoly();
-            principalForm.FilterFill();
+            principalForm.FilterFill(DateTime.Now.Year,true);
             Close();
         }
 

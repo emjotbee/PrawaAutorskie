@@ -36,6 +36,8 @@ namespace PrawaAutorskie
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.Raport = new System.Windows.Forms.Button();
             this.Filtry = new System.Windows.Forms.GroupBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -106,7 +108,7 @@ namespace PrawaAutorskie
             this.Narzedzia.Controls.Add(this.Zastosuj);
             this.Narzedzia.Location = new System.Drawing.Point(704, 170);
             this.Narzedzia.Name = "Narzedzia";
-            this.Narzedzia.Size = new System.Drawing.Size(303, 283);
+            this.Narzedzia.Size = new System.Drawing.Size(336, 283);
             this.Narzedzia.TabIndex = 2;
             this.Narzedzia.TabStop = false;
             this.Narzedzia.Text = "Narzędzia";
@@ -127,7 +129,7 @@ namespace PrawaAutorskie
             // 
             this.Raport.Location = new System.Drawing.Point(7, 90);
             this.Raport.Name = "Raport";
-            this.Raport.Size = new System.Drawing.Size(289, 27);
+            this.Raport.Size = new System.Drawing.Size(317, 27);
             this.Raport.TabIndex = 9;
             this.Raport.Text = "Generuj raport dla US";
             this.Raport.UseVisualStyleBackColor = true;
@@ -135,22 +137,46 @@ namespace PrawaAutorskie
             // 
             // Filtry
             // 
+            this.Filtry.Controls.Add(this.comboBox3);
+            this.Filtry.Controls.Add(this.label7);
             this.Filtry.Controls.Add(this.comboBox2);
             this.Filtry.Controls.Add(this.label6);
             this.Filtry.Controls.Add(this.comboBox1);
             this.Filtry.Controls.Add(this.label5);
             this.Filtry.Location = new System.Drawing.Point(6, 123);
             this.Filtry.Name = "Filtry";
-            this.Filtry.Size = new System.Drawing.Size(290, 63);
+            this.Filtry.Size = new System.Drawing.Size(324, 63);
             this.Filtry.TabIndex = 8;
             this.Filtry.TabStop = false;
             this.Filtry.Text = "Filtry";
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Location = new System.Drawing.Point(141, 22);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(55, 23);
+            this.comboBox3.Sorted = true;
+            this.comboBox3.TabIndex = 16;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            this.comboBox3.Click += new System.EventHandler(this.comboBox3_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label7.Location = new System.Drawing.Point(108, 28);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(27, 15);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Rok";
             // 
             // comboBox2
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(172, 22);
+            this.comboBox2.Location = new System.Drawing.Point(263, 22);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(55, 23);
             this.comboBox2.Sorted = true;
@@ -161,7 +187,7 @@ namespace PrawaAutorskie
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(112, 28);
+            this.label6.Location = new System.Drawing.Point(202, 28);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(54, 15);
             this.label6.TabIndex = 13;
@@ -201,9 +227,9 @@ namespace PrawaAutorskie
             // 
             // Pobierz
             // 
-            this.Pobierz.Location = new System.Drawing.Point(208, 22);
+            this.Pobierz.Location = new System.Drawing.Point(221, 22);
             this.Pobierz.Name = "Pobierz";
-            this.Pobierz.Size = new System.Drawing.Size(89, 62);
+            this.Pobierz.Size = new System.Drawing.Size(103, 62);
             this.Pobierz.TabIndex = 6;
             this.Pobierz.Text = "Pobierz plik";
             this.Pobierz.UseVisualStyleBackColor = true;
@@ -211,7 +237,7 @@ namespace PrawaAutorskie
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(101, 22);
+            this.button2.Location = new System.Drawing.Point(114, 22);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(101, 62);
             this.button2.TabIndex = 5;
@@ -235,7 +261,7 @@ namespace PrawaAutorskie
             // 
             this.DodajDzielo.Location = new System.Drawing.Point(6, 22);
             this.DodajDzielo.Name = "DodajDzielo";
-            this.DodajDzielo.Size = new System.Drawing.Size(89, 62);
+            this.DodajDzielo.Size = new System.Drawing.Size(101, 62);
             this.DodajDzielo.TabIndex = 3;
             this.DodajDzielo.Text = "Dodaj dzieło";
             this.DodajDzielo.UseVisualStyleBackColor = true;
@@ -245,16 +271,16 @@ namespace PrawaAutorskie
             // 
             this.textBox5.Location = new System.Drawing.Point(7, 192);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(289, 23);
+            this.textBox5.Size = new System.Drawing.Size(323, 23);
             this.textBox5.TabIndex = 15;
             this.textBox5.Text = "Szukaj w bazie danych bez filtrów";
             this.textBox5.Enter += new System.EventHandler(this.textBox5_Enter);
             // 
             // Wyczysc
             // 
-            this.Wyczysc.Location = new System.Drawing.Point(149, 246);
+            this.Wyczysc.Location = new System.Drawing.Point(177, 246);
             this.Wyczysc.Name = "Wyczysc";
-            this.Wyczysc.Size = new System.Drawing.Size(148, 29);
+            this.Wyczysc.Size = new System.Drawing.Size(153, 29);
             this.Wyczysc.TabIndex = 10;
             this.Wyczysc.Text = "Wyczyść";
             this.Wyczysc.UseVisualStyleBackColor = true;
@@ -264,7 +290,7 @@ namespace PrawaAutorskie
             // 
             this.Zastosuj.Location = new System.Drawing.Point(6, 246);
             this.Zastosuj.Name = "Zastosuj";
-            this.Zastosuj.Size = new System.Drawing.Size(135, 29);
+            this.Zastosuj.Size = new System.Drawing.Size(165, 29);
             this.Zastosuj.TabIndex = 9;
             this.Zastosuj.Text = "Zastosuj";
             this.Zastosuj.UseVisualStyleBackColor = true;
@@ -282,7 +308,7 @@ namespace PrawaAutorskie
             this.Szczegoly.Controls.Add(this.label1);
             this.Szczegoly.Location = new System.Drawing.Point(704, 27);
             this.Szczegoly.Name = "Szczegoly";
-            this.Szczegoly.Size = new System.Drawing.Size(303, 137);
+            this.Szczegoly.Size = new System.Drawing.Size(336, 137);
             this.Szczegoly.TabIndex = 3;
             this.Szczegoly.TabStop = false;
             this.Szczegoly.Text = "Szczegóły";
@@ -292,7 +318,7 @@ namespace PrawaAutorskie
             this.textBox4.Location = new System.Drawing.Point(162, 101);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(135, 23);
+            this.textBox4.Size = new System.Drawing.Size(162, 23);
             this.textBox4.TabIndex = 7;
             // 
             // textBox3
@@ -300,7 +326,7 @@ namespace PrawaAutorskie
             this.textBox3.Location = new System.Drawing.Point(162, 72);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(135, 23);
+            this.textBox3.Size = new System.Drawing.Size(162, 23);
             this.textBox3.TabIndex = 6;
             // 
             // textBox2
@@ -308,7 +334,7 @@ namespace PrawaAutorskie
             this.textBox2.Location = new System.Drawing.Point(162, 42);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(135, 23);
+            this.textBox2.Size = new System.Drawing.Size(162, 23);
             this.textBox2.TabIndex = 5;
             // 
             // textBox1
@@ -316,7 +342,7 @@ namespace PrawaAutorskie
             this.textBox1.Location = new System.Drawing.Point(162, 13);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(135, 23);
+            this.textBox1.Size = new System.Drawing.Size(162, 23);
             this.textBox1.TabIndex = 4;
             // 
             // label4
@@ -365,7 +391,7 @@ namespace PrawaAutorskie
             this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1019, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1052, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -380,7 +406,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 456);
+            this.ClientSize = new System.Drawing.Size(1052, 456);
             this.Controls.Add(this.Szczegoly);
             this.Controls.Add(this.Narzedzia);
             this.Controls.Add(this.Lista);
@@ -439,6 +465,8 @@ namespace PrawaAutorskie
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.Label label7;
     }
 }
 
