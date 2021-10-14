@@ -275,6 +275,7 @@ namespace PrawaAutorskie
             this.textBox5.TabIndex = 15;
             this.textBox5.Text = "Szukaj w bazie danych bez filtrów";
             this.textBox5.Enter += new System.EventHandler(this.textBox5_Enter);
+            this.textBox5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox5_KeyPress);
             // 
             // Wyczysc
             // 

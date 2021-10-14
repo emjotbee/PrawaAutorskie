@@ -18,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.1";
+        private string version = "0.1.2";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -199,26 +199,26 @@ namespace PrawaAutorskie
 
         public DataTable LoadTable(string _query)
         {
-            // Create a connection  
-            conn = new SqlConnection(initialcatalogConnectionString);
-            // Open the connection  
-            if (conn.State == ConnectionState.Open)
-                conn.Close();
-            conn.ConnectionString = (initialcatalogConnectionString);
-            conn.Open();
-            // Create a data adapter  
-            SqlDataAdapter da = new SqlDataAdapter
-            (_query, conn);
-            // Create DataSet, fill it and view in data grid  
-            DataSet ds = new DataSet("ListaDziel");
-            da.Fill(ds, "ListaDziel");
-            dataGridView1.Columns.Clear();
-            dataGridView1.DataSource = ds.Tables["ListaDziel"].DefaultView;
-            dataGridView1.Columns[0].Visible = false;
-            dataGridView1.AutoResizeColumns();
-            DataTable dziela = ds.Tables["ListaDziel"];
-            return dziela;
-            //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                // Create a connection  
+                conn = new SqlConnection(initialcatalogConnectionString);
+                // Open the connection  
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+                conn.ConnectionString = (initialcatalogConnectionString);
+                conn.Open();
+                // Create a data adapter  
+                SqlDataAdapter da = new SqlDataAdapter
+                (_query, conn);
+                // Create DataSet, fill it and view in data grid  
+                DataSet ds = new DataSet("ListaDziel");
+                da.Fill(ds, "ListaDziel");
+                dataGridView1.Columns.Clear();
+                dataGridView1.DataSource = ds.Tables["ListaDziel"].DefaultView;
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.AutoResizeColumns();
+                DataTable dziela = ds.Tables["ListaDziel"];
+                return dziela;
+                //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;           
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -246,7 +246,7 @@ namespace PrawaAutorskie
             catch
             {
                 SystemSounds.Beep.Play();
-                MessageBox.Show("Brak dzeła do usunięcia", "Błąd");
+                MessageBox.Show("Brak dzieła do usunięcia", "Błąd");
             }
         }
 
@@ -301,42 +301,57 @@ namespace PrawaAutorskie
         {
             try
             {
-                int rowIndex = dataGridView1.CurrentCell.RowIndex;
-                Guid num = (Guid)dataGridView1.Rows[rowIndex].Cells[0].Value;
-                using (FolderBrowserDialog dlg = new FolderBrowserDialog())
+                if (dataGridView1.CurrentCell != null)
                 {
-                    dlg.Description = "Wybierz folder";
-                    if (dlg.ShowDialog() == DialogResult.OK)
+                    int rowIndex = dataGridView1.CurrentCell.RowIndex;
+                    Guid num = (Guid)dataGridView1.Rows[rowIndex].Cells[0].Value;
+                    using (FolderBrowserDialog dlg = new FolderBrowserDialog())
                     {
-                        databaseFileRead(num.ToString(), Path.Combine(dlg.SelectedPath, dataGridView1.Rows[rowIndex].Cells[5].Value.ToString()));
-                        SystemSounds.Hand.Play();
-                        MessageBox.Show("Plik zapisany pomyślnie", "Sukces");
+                        dlg.Description = "Wybierz folder";
+                        if (dlg.ShowDialog() == DialogResult.OK)
+                        {
+                            databaseFileRead(num.ToString(), Path.Combine(dlg.SelectedPath, dataGridView1.Rows[rowIndex].Cells[5].Value.ToString()));
+                            SystemSounds.Hand.Play();
+                            MessageBox.Show("Plik zapisany pomyślnie", "Sukces");
+                        }
                     }
+                }
+                else
+                {
+                    throw new Exception();
+                }                
+            }
+            catch
+            {
+                SystemSounds.Beep.Play();
+                MessageBox.Show("Brak pliku do pobrania", "Błąd");
+            }
+        }
+        public static void databaseFileRead(string varID, string varPathToNewLocation)
+        {
+            try
+            {
+                using (var varConnection = new SqlConnection(initialcatalogConnectionString))
+                using (var sqlQuery = new SqlCommand(@"SELECT PlikDirect FROM ListaDziel WHERE Id = @varID", varConnection))
+                {
+                    varConnection.Open();
+                    sqlQuery.Parameters.AddWithValue("@varID", varID);
+                    using (var sqlQueryResult = sqlQuery.ExecuteReader())
+                        if (sqlQueryResult != null)
+                        {
+                            sqlQueryResult.Read();
+                            var blob = new Byte[(sqlQueryResult.GetBytes(0, 0, null, 0, int.MaxValue))];
+                            sqlQueryResult.GetBytes(0, 0, blob, 0, blob.Length);
+                            using (var fs = new FileStream(varPathToNewLocation, FileMode.Create, FileAccess.Write))
+                                fs.Write(blob, 0, blob.Length);
+                        }
                 }
             }
             catch
             {
                 SystemSounds.Beep.Play();
-                MessageBox.Show("Nie można zapisać pliku", "Błąd");
-            }
-        }
-        public static void databaseFileRead(string varID, string varPathToNewLocation)
-        {
-            using (var varConnection = new SqlConnection(initialcatalogConnectionString))
-            using (var sqlQuery = new SqlCommand(@"SELECT PlikDirect FROM ListaDziel WHERE Id = @varID", varConnection))
-            {
-                varConnection.Open();
-                sqlQuery.Parameters.AddWithValue("@varID", varID);
-                using (var sqlQueryResult = sqlQuery.ExecuteReader())
-                    if (sqlQueryResult != null)
-                    {
-                        sqlQueryResult.Read();
-                        var blob = new Byte[(sqlQueryResult.GetBytes(0, 0, null, 0, int.MaxValue))];
-                        sqlQueryResult.GetBytes(0, 0, blob, 0, blob.Length);
-                        using (var fs = new FileStream(varPathToNewLocation, FileMode.Create, FileAccess.Write))
-                        fs.Write(blob, 0, blob.Length);
-                    }
-            }
+                MessageBox.Show("Nie pobrać pliku", "Błąd");
+            }           
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -706,6 +721,16 @@ namespace PrawaAutorskie
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             FilterFill(Convert.ToInt32(comboBox3.SelectedItem), false);
+        }
+
+        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            int asc = e.KeyChar;
+            if (asc == 13)
+            {
+                Zastosuj_Click(sender, e);
+                e.Handled = true;
+            }
         }
     }
     }
