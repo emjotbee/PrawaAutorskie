@@ -64,7 +64,7 @@ namespace PrawaAutorskie
         private void Dodaj_Click(object sender, EventArgs e)
         {
             AddItem();
-            principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+            principalForm.LoadTable(Form1.defquery);
             principalForm.CalculateSzczegoly();
             principalForm.FilterFill(DateTime.Now.Year,true);
             Close();

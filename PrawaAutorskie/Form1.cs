@@ -18,10 +18,11 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.2";
+        private string version = "0.1.3";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
+        public static string defquery = $"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'";
 
         public Form1()
         {
@@ -103,7 +104,7 @@ namespace PrawaAutorskie
             {
                 PrepareDatabase(masterConnectionString, "PrawaAutorskie");
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+                LoadTable(defquery);
                 CalculateSzczegoly();
                 FilterFill(DateTime.Now.Year,true);
             }
@@ -130,8 +131,8 @@ namespace PrawaAutorskie
             {
                 textBox1.Text = "70";
                 textBox2.Text = (160 * Convert.ToInt32(textBox1.Text) / 100).ToString();
-                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'", initialcatalogConnectionString))).ToString();
-                textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'", initialcatalogConnectionString);
+                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString))).ToString();
+                textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString);
 
             }
             catch
@@ -224,7 +225,7 @@ namespace PrawaAutorskie
         private void button2_Click(object sender, EventArgs e)
         {
             RemoveDzielo();
-            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+            LoadTable(defquery);
             CalculateSzczegoly();
             FilterFill(DateTime.Now.Year,true);
         }
@@ -479,11 +480,11 @@ namespace PrawaAutorskie
             {
                 if(m == "brak")
                 {
-                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data < '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(1))}' AND Plik LIKE '%{p}%'");
+                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data <= '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(12))}' AND Plik LIKE '%{p}%'");
                 }
                 else
                 {
-                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data < '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data <= '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
                 }       
             }
         }
@@ -497,7 +498,7 @@ namespace PrawaAutorskie
             checkBox2.Checked = true;
             checkBox3.Checked = true;
             textBox5.Text = "Szukaj w bazie danych bez filtrów";
-            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+            LoadTable(defquery);
             FilterFill(DateTime.Now.Year, true);
         }
 
@@ -592,7 +593,7 @@ namespace PrawaAutorskie
             {
                 ButtonsEnabled(true);
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01'");
+                LoadTable(defquery);
                 CalculateSzczegoly();
                 FilterFill(DateTime.Now.Year, true);
                 ResetSearch("Search");
