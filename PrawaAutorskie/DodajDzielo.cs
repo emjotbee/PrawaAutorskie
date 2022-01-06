@@ -63,11 +63,22 @@ namespace PrawaAutorskie
 
         private void Dodaj_Click(object sender, EventArgs e)
         {
-            AddItem();
-            principalForm.LoadTable(Form1.defquery);
-            principalForm.CalculateSzczegoly();
-            principalForm.FilterFill(DateTime.Now.Year,true);
-            Close();
+            if(Dodaj.Text == "Dodaj")
+            {
+                AddItem();
+                principalForm.LoadTable(Form1.defquery);
+                principalForm.CalculateSzczegoly();
+                principalForm.FilterFill(DateTime.Now.Year, true);
+                Close();
+            }
+            else
+            {
+                UpdateItem(principalForm.GetDzieloGuid());
+                principalForm.LoadTable(Form1.defquery);
+                principalForm.CalculateSzczegoly();
+                principalForm.FilterFill(DateTime.Now.Year, true);
+                Close();
+            }
         }
 
         private void dodajplik_Click(object sender, EventArgs e)
@@ -102,6 +113,72 @@ namespace PrawaAutorskie
         private void DodajDzielo_FormClosing(object sender, FormClosingEventArgs e)
         {
             principalForm.Enabled = true;
+        }
+
+        public void LoadDzielo(Guid _guid)
+        {
+            Dodaj.Text = "Zapisz";
+            Form.ActiveForm.Text = "Aktualizuj dzieło";
+            try
+            {
+                textBox1.Text = principalForm.ReadSQL($"SELECT Tytuł FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
+                textBox2.Text = principalForm.ReadSQL($"SELECT Czas FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
+                dateTimePicker1.Value = Convert.ToDateTime(principalForm.ReadSQL($"SELECT Data FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
+                richTextBox1.Text = principalForm.ReadSQL($"SELECT Opis FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
+                dataGridView1.Rows.Add("baza danych", principalForm.ReadSQL($"SELECT Plik FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
+                Dodaj.Enabled = true;
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+                MessageBox.Show("Błąd podczas ładowania dzieła", "Błąd");
+            }
+        }
+
+        private void UpdateItem(Guid _guid)
+        {
+            if (dataGridView1.Rows[0].Cells[0].Value.ToString() == "baza danych")
+            {
+                principalForm.ExecuteSQLStmt($"UPDATE ListaDziel SET Tytuł='{textBox1.Text}', Czas ='{textBox2.Text}',Data ='{dateTimePicker1.Value}',Opis ='{richTextBox1.Text}' WHERE Id ='{_guid}'", Form1.initialcatalogConnectionString);
+            }
+            else
+            {
+                try
+                {
+                    SqlCommand cmd = null;
+                    string connectionString = Form1.initialcatalogConnectionString;
+                    byte[] file;
+                    using (var stream = new FileStream(dataGridView1.Rows[0].Cells[0].Value.ToString(), FileMode.Open, FileAccess.Read))
+                    {
+                        using (var reader = new BinaryReader(stream))
+                        {
+                            file = reader.ReadBytes((int)stream.Length);
+                        }
+                    }
+                    using (var connection = new SqlConnection(connectionString))
+                    {
+                        try
+                        {
+                            connection.Open();
+                            using (cmd = new SqlCommand($"UPDATE ListaDziel SET Tytuł='{textBox1.Text}', Czas ='{textBox2.Text}',Data ='{dateTimePicker1.Value}',Opis ='{richTextBox1.Text}',PlikDirect =@File,Plik ='{dataGridView1.Rows[0].Cells[1].Value}' WHERE Id ='{_guid}'", connection))
+                            {
+                                cmd.Parameters.Add("@File", SqlDbType.VarBinary, file.Length).Value = file;
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        catch (SqlException ae)
+                        {
+                            SystemSounds.Hand.Play();
+                            MessageBox.Show(ae.Message.ToString(), "Błąd");
+                        }
+                    }
+                }
+                catch
+                {
+                    SystemSounds.Hand.Play();
+                    MessageBox.Show("Nie można dodać dzieła", "Błąd");
+                }
+            }          
         }
     }
     }

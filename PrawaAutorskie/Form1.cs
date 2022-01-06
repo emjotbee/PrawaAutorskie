@@ -18,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.3";
+        private string version = "0.1.4";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -27,7 +27,7 @@ namespace PrawaAutorskie
         public Form1()
         {
             InitializeComponent();
-            Text = "PrawaAutorskie " + version + " ©2021 Kamil Kłonica";
+            Text = "PrawaAutorskie " + version + " ©2022 Kamil Kłonica";
         }       
         public bool PrepareDatabase(string connectionString, string dbName)
         {
@@ -732,6 +732,21 @@ namespace PrawaAutorskie
                 Zastosuj_Click(sender, e);
                 e.Handled = true;
             }
+        }
+
+        public Guid GetDzieloGuid()
+        {
+             int _rowIndex = dataGridView1.CurrentCell.RowIndex;
+             Guid num = (Guid)dataGridView1.Rows[_rowIndex].Cells[0].Value;
+             return num;
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DodajDzielo dodajdzielo = new DodajDzielo();
+            dodajdzielo.Show();
+            base.Enabled = false;
+            dodajdzielo.LoadDzielo(GetDzieloGuid());
         }
     }
     }
