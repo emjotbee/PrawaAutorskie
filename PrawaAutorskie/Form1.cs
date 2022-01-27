@@ -18,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.4";
+        private string version = "0.1.5";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -32,18 +32,17 @@ namespace PrawaAutorskie
         public bool PrepareDatabase(string connectionString, string dbName)
         {
             int a = 0;
-            Directory.CreateDirectory($"C:\\{dbName}");
             SqlCommand cmd = null;
             using (var connection = new SqlConnection(connectionString))
             {                
                 try
                 {
                 connection.Open();
-                using (cmd = new SqlCommand($"If(db_id(N'{dbName}') IS NULL) CREATE DATABASE [{dbName}] ON PRIMARY" + $"(Name={dbName}, filename = 'C:\\{dbName}\\{dbName}.mdf', size=50," + "maxsize=100, filegrowth=10%)log on" + $"(name={dbName}_log, filename='C:\\{dbName}\\{dbName}.ldf',size=3," + "maxsize=20,filegrowth=1)", connection))
+                using (cmd = new SqlCommand($"If(db_id(N'{dbName}') IS NULL) BEGIN CREATE DATABASE [{dbName}] ALTER DATABASE [{dbName}] MODIFY FILE(NAME = N'{dbName}', SIZE = 50, MAXSIZE = UNLIMITED, FILEGROWTH = 10%) ALTER DATABASE [{dbName}] MODIFY FILE (NAME = N'{dbName}_log', SIZE = 10, MAXSIZE = UNLIMITED, FILEGROWTH = 1) END", connection))
                 {
                         a = cmd.ExecuteNonQuery();
                         connection.ChangeDatabase("PrawaAutorskie");
-                        using (cmd = new SqlCommand("IF OBJECT_ID (N'ListaDziel', N'U') IS NULL CREATE TABLE ListaDziel" + "(Id UNIQUEIDENTIFIER PRIMARY KEY default NEWID()," + "Tytuł VARCHAR(255), Opis TEXT, Czas INTEGER, Data DATE, PlikDirect VARBINARY(MAX), Plik VARCHAR(255))", connection))
+                        using (cmd = new SqlCommand("IF OBJECT_ID (N'ListaDziel', N'U') IS NULL CREATE TABLE ListaDziel" + "(Id UNIQUEIDENTIFIER PRIMARY KEY default NEWID()," + "Tytuł VARCHAR(255), Opis TEXT, Czas INTEGER, Data DATE, PlikDirect VARBINARY(MAX), Plik VARCHAR(255));IF OBJECT_ID(N'Backups', N'U') IS NULL CREATE TABLE Backups" + "(Nazwa VARCHAR(255))", connection))
                         {
                                 cmd.ExecuteNonQuery();
                         }

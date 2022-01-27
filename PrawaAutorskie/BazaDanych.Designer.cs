@@ -50,6 +50,7 @@ namespace PrawaAutorskie
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -251,6 +252,7 @@ namespace PrawaAutorskie
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.comboBox2);
             this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.button2);
@@ -268,6 +270,15 @@ namespace PrawaAutorskie
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Narzędzia";
             // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(326, 61);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(197, 23);
+            this.comboBox2.TabIndex = 13;
+            // 
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -275,16 +286,16 @@ namespace PrawaAutorskie
             this.comboBox1.Items.AddRange(new object[] {
             "Master",
             "PrawaAutorskie"});
-            this.comboBox1.Location = new System.Drawing.Point(417, 101);
+            this.comboBox1.Location = new System.Drawing.Point(404, 101);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(106, 23);
+            this.comboBox1.Size = new System.Drawing.Size(119, 23);
             this.comboBox1.TabIndex = 12;
             // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(134, 27);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(131, 57);
+            this.button1.Size = new System.Drawing.Size(90, 57);
             this.button1.TabIndex = 9;
             this.button1.Text = "Sprawdź poł.";
             this.button1.UseVisualStyleBackColor = true;
@@ -292,9 +303,9 @@ namespace PrawaAutorskie
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(404, 27);
+            this.button2.Location = new System.Drawing.Point(326, 27);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 57);
+            this.button2.Size = new System.Drawing.Size(197, 28);
             this.button2.TabIndex = 8;
             this.button2.Text = "Zrób restore";
             this.button2.UseVisualStyleBackColor = true;
@@ -302,9 +313,9 @@ namespace PrawaAutorskie
             // 
             // ZrobBackup
             // 
-            this.ZrobBackup.Location = new System.Drawing.Point(271, 27);
+            this.ZrobBackup.Location = new System.Drawing.Point(230, 27);
             this.ZrobBackup.Name = "ZrobBackup";
-            this.ZrobBackup.Size = new System.Drawing.Size(127, 57);
+            this.ZrobBackup.Size = new System.Drawing.Size(90, 57);
             this.ZrobBackup.TabIndex = 6;
             this.ZrobBackup.Text = "Zrób backup";
             this.ZrobBackup.UseVisualStyleBackColor = true;
@@ -364,7 +375,7 @@ namespace PrawaAutorskie
             // 
             this.textBox9.Location = new System.Drawing.Point(121, 101);
             this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(290, 23);
+            this.textBox9.Size = new System.Drawing.Size(277, 23);
             this.textBox9.TabIndex = 4;
             this.textBox9.Enter += new System.EventHandler(this.textBox9_Enter);
             // 
@@ -452,5 +463,6 @@ namespace PrawaAutorskie
         private System.Windows.Forms.Button ZrobBackup;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }

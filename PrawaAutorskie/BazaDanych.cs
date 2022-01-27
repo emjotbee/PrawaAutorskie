@@ -75,14 +75,18 @@ namespace PrawaAutorskie
         {
             FillData(Form1.masterConnectionString);
             comboBox1.SelectedIndex = 1;
+            FillBackupsComboBox();
         }
 
         private void ZrobBackup_Click(object sender, EventArgs e)
         {
-            if (principalForm.ExecuteSQLStmt($"BACKUP DATABASE [PrawaAutorskie] TO  DISK = N'C:\\PrawaAutorskie\\PrawaAutorskie{DateTime.Now:ddMMyyyy}.bak' WITH NOFORMAT, NOINIT,  NAME = N'PrawaAutorskie-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10", Form1.initialcatalogConnectionString))
+            string nazwa = $"PrawaAutorskie{DateTime.Now:ddMMyyyy}.bak";
+            if (principalForm.ExecuteSQLStmt($"BACKUP DATABASE [PrawaAutorskie] TO  DISK = N'{nazwa}' WITH NOFORMAT, INIT,  NAME = N'PrawaAutorskie-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10", Form1.initialcatalogConnectionString))
             {
                 SystemSounds.Hand.Play();
                 MessageBox.Show("Backup zakończony sukcesem", "Sukces");
+                principalForm.ExecuteSQLStmt($"IF NOT EXISTS (select Nazwa from Backups where Nazwa ='{nazwa}') INSERT INTO Backups(Nazwa) " + $"VALUES ('{nazwa}')", Form1.initialcatalogConnectionString);
+                FillBackupsComboBox();
             }
         }
 
@@ -141,30 +145,55 @@ namespace PrawaAutorskie
 
         private void button2_Click(object sender, EventArgs e)
         {
-            try
+            if (comboBox2.SelectedIndex == -1)
             {
-                openFileDialog1.FileName = "";
-                openFileDialog1.Title = "Załaduj plik backupu";
-                openFileDialog1.Filter = "Backup files (*.bak)|*.bak|All files (*.*)|*.*";
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                try
                 {
+                    openFileDialog1.FileName = "";
+                    openFileDialog1.Title = "Załaduj plik backupu";
+                    openFileDialog1.Filter = "Backup files (*.bak)|*.bak|All files (*.*)|*.*";
+                    if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
                         string file = openFileDialog1.FileName.Replace(@"\", @"\\");
                         if (principalForm.ExecuteSQLStmt($"RESTORE DATABASE [PrawaAutorskie] FROM  DISK = N'{file}' WITH  FILE = 1,  NOUNLOAD,  STATS = 5", Form1.masterConnectionString))
                         {
-                        SystemSounds.Hand.Play();
-                        MessageBox.Show("Restore zakończony sukcesem", "Sukces");
+                            SystemSounds.Hand.Play();
+                            MessageBox.Show("Restore zakończony sukcesem", "Sukces");
                         }
                         else
                         {
-                        SystemSounds.Beep.Play();
-                        MessageBox.Show("Restore nie powiódł się", "Błąd");
+                            SystemSounds.Beep.Play();
+                            MessageBox.Show("Restore nie powiódł się", "Błąd");
                         }
+                    }
+                }
+                catch
+                {
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show("Nie udało się załadować pliku", "Błąd");
                 }
             }
-            catch
+            else
             {
-                SystemSounds.Beep.Play();
-                MessageBox.Show("Nie udało się załadować pliku", "Błąd");
+                try
+                {
+                    string file = comboBox2.SelectedItem.ToString();
+                    if (principalForm.ExecuteSQLStmt($"RESTORE DATABASE [PrawaAutorskie] FROM  DISK = N'{file}' WITH  FILE = 1,  NOUNLOAD,  STATS = 5", Form1.masterConnectionString))
+                    {
+                        SystemSounds.Hand.Play();
+                        MessageBox.Show("Restore zakończony sukcesem", "Sukces");
+                    }
+                    else
+                    {
+                        SystemSounds.Beep.Play();
+                        MessageBox.Show("Restore nie powiódł się", "Błąd");
+                    }
+                }
+                catch
+                {
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show("Restore nie powiódł się", "Błąd");
+                }
             }
 
         }
@@ -211,6 +240,38 @@ namespace PrawaAutorskie
         {
             SystemSounds.Hand.Play();
             MessageBox.Show(principalForm.ReadSQL(textBox10.Text, Form1.initialcatalogConnectionString), "Sukces");
+        }
+        void FillBackupsComboBox()
+        {
+            try
+            {
+                // Create a connection  
+                SqlConnection conn = new SqlConnection(Form1.initialcatalogConnectionString);
+                // Open the connection  
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+                conn.ConnectionString = (Form1.initialcatalogConnectionString);
+                conn.Open();
+                // Create a data adapter  
+                SqlDataAdapter da = new SqlDataAdapter
+                ($"SELECT * FROM Backups", conn);
+                // Create DataSet, fill it and view in data grid  
+                DataSet ds = new DataSet("Backups");
+                da.Fill(ds, "Backups");
+                DataTable dziela = ds.Tables["Backups"];
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    if (!comboBox2.Items.Contains((string)row["Nazwa"]))
+                    {
+                        comboBox2.Items.Add((string)row["Nazwa"]);
+                    }
+                }
+            }
+            catch
+            {
+                SystemSounds.Beep.Play();
+                MessageBox.Show("Nie można załadować listy backupów", "Błąd");
+            }           
         }
     }
 }
