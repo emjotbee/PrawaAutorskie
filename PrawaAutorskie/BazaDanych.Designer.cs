@@ -50,6 +50,7 @@ namespace PrawaAutorskie
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -66,6 +67,7 @@ namespace PrawaAutorskie
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,7 +102,7 @@ namespace PrawaAutorskie
             // 
             this.ZapiszICS.Location = new System.Drawing.Point(428, 188);
             this.ZapiszICS.Name = "ZapiszICS";
-            this.ZapiszICS.Size = new System.Drawing.Size(95, 28);
+            this.ZapiszICS.Size = new System.Drawing.Size(98, 28);
             this.ZapiszICS.TabIndex = 16;
             this.ZapiszICS.Text = "Zmień";
             this.ZapiszICS.UseVisualStyleBackColor = true;
@@ -127,7 +129,7 @@ namespace PrawaAutorskie
             // 
             this.ZapiszMCS.Location = new System.Drawing.Point(428, 159);
             this.ZapiszMCS.Name = "ZapiszMCS";
-            this.ZapiszMCS.Size = new System.Drawing.Size(95, 28);
+            this.ZapiszMCS.Size = new System.Drawing.Size(98, 28);
             this.ZapiszMCS.TabIndex = 7;
             this.ZapiszMCS.Text = "Zmień";
             this.ZapiszMCS.UseVisualStyleBackColor = true;
@@ -252,6 +254,7 @@ namespace PrawaAutorskie
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.dataGridView1);
             this.groupBox2.Controls.Add(this.comboBox2);
             this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.button1);
@@ -265,10 +268,23 @@ namespace PrawaAutorskie
             this.groupBox2.Controls.Add(this.CzytajBaze);
             this.groupBox2.Location = new System.Drawing.Point(13, 276);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(532, 164);
+            this.groupBox2.Size = new System.Drawing.Size(532, 277);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Narzędzia";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(21, 158);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowTemplate.Height = 25;
+            this.dataGridView1.Size = new System.Drawing.Size(502, 113);
+            this.dataGridView1.TabIndex = 14;
+            this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView1_DataError_1);
             // 
             // comboBox2
             // 
@@ -370,6 +386,7 @@ namespace PrawaAutorskie
             this.textBox10.Size = new System.Drawing.Size(402, 23);
             this.textBox10.TabIndex = 5;
             this.textBox10.Enter += new System.EventHandler(this.textBox10_Enter);
+            this.textBox10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox10_KeyPress);
             // 
             // textBox9
             // 
@@ -409,20 +426,21 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(557, 452);
+            this.ClientSize = new System.Drawing.Size(557, 565);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "BazaDanych";
-            this.Text = "Baza Danych";
+            this.Text = "Baza danych";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BazaDanych_FormClosing);
             this.Load += new System.EventHandler(this.BazaDanych_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -464,5 +482,6 @@ namespace PrawaAutorskie
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

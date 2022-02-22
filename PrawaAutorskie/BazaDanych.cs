@@ -81,7 +81,7 @@ namespace PrawaAutorskie
         private void ZrobBackup_Click(object sender, EventArgs e)
         {
             string nazwa = $"PrawaAutorskie{DateTime.Now:ddMMyyyy}.bak";
-            if (principalForm.ExecuteSQLStmt($"BACKUP DATABASE [PrawaAutorskie] TO  DISK = N'{nazwa}' WITH NOFORMAT, INIT,  NAME = N'PrawaAutorskie-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10", Form1.initialcatalogConnectionString))
+            if (principalForm.ExecuteSQLStmt($"IF NOT EXISTS (select Nazwa from Backups where Nazwa ='{nazwa}') INSERT INTO Backups(Nazwa) " + $"VALUES ('{nazwa}')", Form1.initialcatalogConnectionString) && principalForm.ExecuteSQLStmt($"BACKUP DATABASE [PrawaAutorskie] TO  DISK = N'{nazwa}' WITH NOFORMAT, INIT,  NAME = N'PrawaAutorskie-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10", Form1.initialcatalogConnectionString))
             {
                 SystemSounds.Hand.Play();
                 MessageBox.Show("Backup zakończony sukcesem", "Sukces");
@@ -239,7 +239,8 @@ namespace PrawaAutorskie
         private void CzytajBaze_Click(object sender, EventArgs e)
         {
             SystemSounds.Hand.Play();
-            MessageBox.Show(principalForm.ReadSQL(textBox10.Text, Form1.initialcatalogConnectionString), "Sukces");
+            LoadTable(textBox10.Text);
+            //MessageBox.Show(principalForm.ReadSQL(textBox10.Text, Form1.initialcatalogConnectionString), "Sukces");
         }
         void FillBackupsComboBox()
         {
@@ -272,6 +273,51 @@ namespace PrawaAutorskie
                 SystemSounds.Beep.Play();
                 MessageBox.Show("Nie można załadować listy backupów", "Błąd");
             }           
+        }
+
+        void LoadTable(string _query)
+        {
+            try
+            {
+            // Create a connection  
+            SqlConnection conn = new SqlConnection(Form1.initialcatalogConnectionString);
+            // Open the connection  
+            if (conn.State == ConnectionState.Open)
+                conn.Close();
+            conn.ConnectionString = (Form1.initialcatalogConnectionString);
+            conn.Open();           
+            // Create a data adapter  
+            SqlDataAdapter da = new SqlDataAdapter
+            (_query, conn);
+            // Create DataSet, fill it and view in data grid  
+            DataSet ds = new DataSet("Response");
+            da.Fill(ds, "Response");
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = ds.Tables["Response"].DefaultView;
+            dataGridView1.AutoResizeColumns();
+            DataTable dziela = ds.Tables["Response"];
+            }
+            catch
+            {
+                SystemSounds.Beep.Play();
+                MessageBox.Show("Nie można wykonać zapytania", "Błąd");
+            }          
+        }
+
+        private void textBox10_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            int asc = e.KeyChar;
+            if (asc == 13)
+            {
+                CzytajBaze_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView1_DataError_1(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+            e.Cancel = false;
         }
     }
 }

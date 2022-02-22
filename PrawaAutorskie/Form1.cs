@@ -18,7 +18,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.5";
+        private string version = "0.1.6";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -516,7 +516,7 @@ namespace PrawaAutorskie
                         using (XLWorkbook wb = new XLWorkbook())
                         {
                             wb.Worksheets.Add(LoadTable($"SELECT Id, Tytuł, Data, Opis, Plik FROM ListaDziel"), "Dzieła");
-                            wb.SaveAs(Path.Combine(dlg.SelectedPath,"Dziela.xlsx"));
+                            wb.SaveAs(Path.Combine(dlg.SelectedPath,"Raport.xlsx"));
                             foreach(DataGridViewRow row in dataGridView1.Rows)
                             {
                                 databaseFileRead(dataGridView1.Rows[row.Index].Cells[0].Value.ToString(), Path.Combine(dlg.SelectedPath, dataGridView1.Rows[row.Index].Cells[4].Value.ToString()));
@@ -729,6 +729,10 @@ namespace PrawaAutorskie
             if (asc == 13)
             {
                 Zastosuj_Click(sender, e);
+                e.Handled = true;
+            }else if(asc == 27)
+            {
+                Wyczysc_Click(sender, e);
                 e.Handled = true;
             }
         }
