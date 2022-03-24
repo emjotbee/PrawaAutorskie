@@ -51,6 +51,10 @@ namespace PrawaAutorskie
             this.Wyczysc = new System.Windows.Forms.Button();
             this.Zastosuj = new System.Windows.Forms.Button();
             this.Szczegoly = new System.Windows.Forms.GroupBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -76,7 +80,7 @@ namespace PrawaAutorskie
             this.Lista.Controls.Add(this.dataGridView1);
             this.Lista.Location = new System.Drawing.Point(12, 27);
             this.Lista.Name = "Lista";
-            this.Lista.Size = new System.Drawing.Size(686, 426);
+            this.Lista.Size = new System.Drawing.Size(686, 497);
             this.Lista.TabIndex = 0;
             this.Lista.TabStop = false;
             this.Lista.Text = "Lista";
@@ -90,7 +94,7 @@ namespace PrawaAutorskie
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(674, 396);
+            this.dataGridView1.Size = new System.Drawing.Size(674, 469);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
@@ -107,9 +111,9 @@ namespace PrawaAutorskie
             this.Narzedzia.Controls.Add(this.textBox5);
             this.Narzedzia.Controls.Add(this.Wyczysc);
             this.Narzedzia.Controls.Add(this.Zastosuj);
-            this.Narzedzia.Location = new System.Drawing.Point(704, 170);
+            this.Narzedzia.Location = new System.Drawing.Point(704, 240);
             this.Narzedzia.Name = "Narzedzia";
-            this.Narzedzia.Size = new System.Drawing.Size(336, 283);
+            this.Narzedzia.Size = new System.Drawing.Size(336, 284);
             this.Narzedzia.TabIndex = 2;
             this.Narzedzia.TabStop = false;
             this.Narzedzia.Text = "Narzędzia";
@@ -300,6 +304,10 @@ namespace PrawaAutorskie
             // 
             // Szczegoly
             // 
+            this.Szczegoly.Controls.Add(this.textBox7);
+            this.Szczegoly.Controls.Add(this.textBox6);
+            this.Szczegoly.Controls.Add(this.label9);
+            this.Szczegoly.Controls.Add(this.label8);
             this.Szczegoly.Controls.Add(this.textBox4);
             this.Szczegoly.Controls.Add(this.textBox3);
             this.Szczegoly.Controls.Add(this.textBox2);
@@ -310,10 +318,44 @@ namespace PrawaAutorskie
             this.Szczegoly.Controls.Add(this.label1);
             this.Szczegoly.Location = new System.Drawing.Point(704, 27);
             this.Szczegoly.Name = "Szczegoly";
-            this.Szczegoly.Size = new System.Drawing.Size(336, 137);
+            this.Szczegoly.Size = new System.Drawing.Size(336, 207);
             this.Szczegoly.TabIndex = 3;
             this.Szczegoly.TabStop = false;
             this.Szczegoly.Text = "Szczegóły";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(162, 176);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.ReadOnly = true;
+            this.textBox7.Size = new System.Drawing.Size(162, 23);
+            this.textBox7.TabIndex = 11;
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(162, 147);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.ReadOnly = true;
+            this.textBox6.Size = new System.Drawing.Size(162, 23);
+            this.textBox6.TabIndex = 10;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 184);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(88, 15);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "Godzin ogółem";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 155);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(76, 15);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "Dzieł ogółem";
             // 
             // textBox4
             // 
@@ -408,7 +450,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1052, 456);
+            this.ClientSize = new System.Drawing.Size(1052, 536);
             this.Controls.Add(this.Szczegoly);
             this.Controls.Add(this.Narzedzia);
             this.Controls.Add(this.Lista);
@@ -469,6 +511,10 @@ namespace PrawaAutorskie
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
     }
 }
 

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Media;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace PrawaAutorskie
 {
@@ -26,21 +28,35 @@ namespace PrawaAutorskie
 
         public bool CheckSQLConnection(string _connectionstring)
         {
-            try
-            {
-                string connetionString;
+            Loading load = new Loading();
+            Task th = new Task(() => Application.Run(load));
+            string connetionString;
             SqlConnection cnn;
             connetionString = _connectionstring;
             cnn = new SqlConnection(connetionString);
-            cnn.Open();
-            cnn.Close();
-            return true;
-            }
-            catch
+            try
             {
+                // Start the task.
+                var task = Task.Factory.StartNew(() =>
+                {
+                    cnn.Open();
+                    cnn.Close();
+                });
+                if (Application.OpenForms["Loading"] == null)
+                {                 
+                   th.Start();
+                   th.Wait(500);
+                }
+                // Await the task.
+                task.Wait();
+                load.Invoke(new Action(() => load.Close()));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                load.Invoke(new Action(() => load.Close()));
                 return false;
             }
-
         }
 
         void FillData(string _connetionstring)
@@ -50,18 +66,26 @@ namespace PrawaAutorskie
                 if (CheckSQLConnection(_connetionstring))
                 {
                     textBox1.Text = "Połączono";
+                    textBox2.Text = "PrawaAutorskie";
+                    textBox3.Text = principalForm.ReadSQL($"DECLARE @cos as varchar(100) ;select @cos = cast(size/128 as varchar) FROM sys.database_files where type = 0 select @cos +N'MB Baza + '+ cast(size/128 as varchar) + N'MB Log' FROM sys.database_files where type = 1", Form1.initialcatalogConnectionString);
+                    textBox4.Text = principalForm.ReadSQL($"SELECT physical_name AS data_file FROM sys.master_files WHERE name = 'PrawaAutorskie'", Form1.initialcatalogConnectionString);
+                    textBox5.Text = principalForm.ReadSQL($"SELECT physical_name AS data_file FROM sys.master_files WHERE name = 'PrawaAutorskie_log'", Form1.initialcatalogConnectionString);
+                    textBox6.Text = Form1.masterConnectionString;
+                    textBox7.Text = Form1.initialcatalogConnectionString;
+                    textBox8.Text = principalForm.ReadSQL($"SELECT a.backup_finish_date as 'Data zakonczenia backupu' FROM[msdb].[dbo].[backupset] a inner join[msdb].[dbo].[backupmediafamily] b on(a.media_set_id = b.media_set_id)", Form1.initialcatalogConnectionString);
                 }
                 else
                 {
                     textBox1.Text = "Brak połączenia";
+                    textBox2.Text = "PrawaAutorskie";
+                    textBox3.Text = "Brak połączenia";
+                    textBox4.Text = "Brak połączenia";
+                    textBox5.Text = "Brak połączenia";
+                    textBox6.Text = Form1.masterConnectionString;
+                    textBox7.Text = Form1.initialcatalogConnectionString;
+                    textBox8.Text = "Brak połączenia";
                 }
-                textBox2.Text = "PrawaAutorskie";
-                textBox3.Text = principalForm.ReadSQL($"DECLARE @cos as varchar(100) ;select @cos = cast(size/128 as varchar) FROM sys.database_files where type = 0 select @cos +N'MB Baza + '+ cast(size/128 as varchar) + N'MB Log' FROM sys.database_files where type = 1", Form1.initialcatalogConnectionString);
-                textBox4.Text = principalForm.ReadSQL($"SELECT physical_name AS data_file FROM sys.master_files WHERE name = 'PrawaAutorskie'", Form1.initialcatalogConnectionString);
-                textBox5.Text = principalForm.ReadSQL($"SELECT physical_name AS data_file FROM sys.master_files WHERE name = 'PrawaAutorskie_log'", Form1.initialcatalogConnectionString);
-                textBox6.Text = Form1.masterConnectionString;
-                textBox7.Text = Form1.initialcatalogConnectionString;
-                textBox8.Text = principalForm.ReadSQL($"SELECT a.backup_finish_date as 'Data zakonczenia backupu' FROM[msdb].[dbo].[backupset] a inner join[msdb].[dbo].[backupmediafamily] b on(a.media_set_id = b.media_set_id)", Form1.initialcatalogConnectionString);
+     
             }
             catch
             {
@@ -209,11 +233,16 @@ namespace PrawaAutorskie
             {
                 SystemSounds.Hand.Play();
                 MessageBox.Show("Nawiązano połączenie z serwerem SQL", "Sukces");
+                FillData(Form1.masterConnectionString);
+                comboBox1.SelectedIndex = 1;
+                FillBackupsComboBox();
             }
             else
             {
                 SystemSounds.Beep.Play();
                 MessageBox.Show("Nie udało się nawiązać połączenia z serwerem SQL", "Błąd");
+                FillData(Form1.masterConnectionString);
+                comboBox1.SelectedIndex = 1;
             }
         }
 
@@ -246,26 +275,32 @@ namespace PrawaAutorskie
         {
             try
             {
-                // Create a connection  
-                SqlConnection conn = new SqlConnection(Form1.initialcatalogConnectionString);
                 // Open the connection  
-                if (conn.State == ConnectionState.Open)
-                    conn.Close();
-                conn.ConnectionString = (Form1.initialcatalogConnectionString);
-                conn.Open();
-                // Create a data adapter  
-                SqlDataAdapter da = new SqlDataAdapter
-                ($"SELECT * FROM Backups", conn);
-                // Create DataSet, fill it and view in data grid  
-                DataSet ds = new DataSet("Backups");
-                da.Fill(ds, "Backups");
-                DataTable dziela = ds.Tables["Backups"];
-                foreach (DataRow row in ds.Tables[0].Rows)
+                if (CheckSQLConnection(Form1.initialcatalogConnectionString))
                 {
-                    if (!comboBox2.Items.Contains((string)row["Nazwa"]))
+                    // Create a connection  
+                    SqlConnection conn = new SqlConnection(Form1.initialcatalogConnectionString);
+                    conn.ConnectionString = (Form1.initialcatalogConnectionString);
+                    conn.Open();
+                    // Create a data adapter  
+                    SqlDataAdapter da = new SqlDataAdapter
+                    ($"SELECT * FROM Backups", conn);
+                    // Create DataSet, fill it and view in data grid  
+                    DataSet ds = new DataSet("Backups");
+                    da.Fill(ds, "Backups");
+                    DataTable dziela = ds.Tables["Backups"];
+                    foreach (DataRow row in ds.Tables[0].Rows)
                     {
-                        comboBox2.Items.Add((string)row["Nazwa"]);
+                        if (!comboBox2.Items.Contains((string)row["Nazwa"]))
+                        {
+                            comboBox2.Items.Add((string)row["Nazwa"]);
+                        }
                     }
+                }
+                else
+                {
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show("Nie można załadować listy backupów", "Błąd");
                 }
             }
             catch

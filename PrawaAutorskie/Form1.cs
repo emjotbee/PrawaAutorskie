@@ -8,17 +8,19 @@ using System.Media;
 using DataTable = System.Data.DataTable;
 using ClosedXML.Excel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PrawaAutorskie
 {
     public partial class Form1 : Form
     {
+        private Loading load = new Loading();
         private BazaDanych bazad = new BazaDanych();
         public static string masterConnectionString = null;
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.6";
+        private string version = "0.1.7.5";
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
@@ -113,6 +115,7 @@ namespace PrawaAutorskie
                 MessageBox.Show("Brak połączenia z bazą danych. Sprawdź poprawność connection stringa", "Błąd");
                 BazaDanych baza = new BazaDanych();
                 baza.Show();
+                baza.TopMost = true;
                 base.Enabled = false;
             }
         }
@@ -132,6 +135,8 @@ namespace PrawaAutorskie
                 textBox2.Text = (160 * Convert.ToInt32(textBox1.Text) / 100).ToString();
                 textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString))).ToString();
                 textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString);
+                textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
+                textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
 
             }
             catch
@@ -140,6 +145,8 @@ namespace PrawaAutorskie
                 textBox2.Text = (160 * Convert.ToInt32(textBox1.Text) / 100).ToString();
                 textBox3.Text = textBox2.Text;
                 textBox4.Text = "0";
+                textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
+                textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
             }
         }
 
@@ -198,7 +205,7 @@ namespace PrawaAutorskie
         }
 
         public DataTable LoadTable(string _query)
-        {
+        {           
                 // Create a connection  
                 conn = new SqlConnection(initialcatalogConnectionString);
                 // Open the connection  
@@ -396,9 +403,19 @@ namespace PrawaAutorskie
                     }
                     string typPliku = (string)row["Plik"];
                     string last3c = typPliku.Substring(typPliku.LastIndexOf("."));
-                    if (!comboBox2.Items.Contains(last3c) && date.Year == _year)
+                    if(comboBox3.SelectedIndex == -1)
                     {
-                        comboBox2.Items.Add(last3c);
+                        if (!comboBox2.Items.Contains(last3c))
+                        {
+                            comboBox2.Items.Add(last3c);
+                        }
+                    }
+                    else
+                    {
+                        if (!comboBox2.Items.Contains(last3c) && date.Year == _year)
+                        {
+                            comboBox2.Items.Add(last3c);
+                        }
                     }
                 }
                 list.Sort();
@@ -426,65 +443,73 @@ namespace PrawaAutorskie
 
         private void Zastosuj_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show(GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked));
-            string m;
-            string p;
-            string r;
-            if (comboBox3.SelectedIndex > -1)
+            try
             {
-                r = comboBox3.SelectedItem.ToString();
-            }
-            else
-            {
-                r = DateTime.Now.Year.ToString();
-            }
-            if (comboBox1.SelectedIndex > -1)
-            {
-                m = comboBox1.SelectedItem.ToString();
-            }
-            else
-            {
-                m = "brak";
-            }
-            if (comboBox2.SelectedIndex > -1)
-            {
-                p = comboBox2.SelectedItem.ToString();
-            }
-            else
-            {
-                p = "";
-            }
-            if (m == "brak" && comboBox3.SelectedIndex == -1)
-            {
-                if(textBox5.Text != "Szukaj w bazie danych bez filtrów")
+                //MessageBox.Show(GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked));
+                string m;
+                string p;
+                string r;
+                if (comboBox3.SelectedIndex > -1)
                 {
-                    comboBox1.SelectedIndex = -1;
-                    comboBox2.SelectedIndex = -1;
-                    if(!checkBox1.Checked && !checkBox2.Checked && !checkBox3.Checked)
+                    r = comboBox3.SelectedItem.ToString();
+                }
+                else
+                {
+                    r = DateTime.Now.Year.ToString();
+                }
+                if (comboBox1.SelectedIndex > -1)
+                {
+                    m = comboBox1.SelectedItem.ToString();
+                }
+                else
+                {
+                    m = "brak";
+                }
+                if (comboBox2.SelectedIndex > -1)
+                {
+                    p = comboBox2.SelectedItem.ToString();
+                }
+                else
+                {
+                    p = "";
+                }
+                if (m == "brak" && comboBox3.SelectedIndex == -1)
+                {
+                    if (textBox5.Text != "Szukaj w bazie danych bez filtrów")
                     {
-                        SystemSounds.Beep.Play();
-                        MessageBox.Show("Przynajmniej jeden obszar wyszukiwania musi być zaznaczony", "Błąd");
+                        comboBox1.SelectedIndex = -1;
+                        comboBox2.SelectedIndex = -1;
+                        if (!checkBox1.Checked && !checkBox2.Checked && !checkBox3.Checked)
+                        {
+                            SystemSounds.Beep.Play();
+                            MessageBox.Show("Przynajmniej jeden obszar wyszukiwania musi być zaznaczony", "Błąd");
+                        }
+                        else
+                        {
+                            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE {GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked)}");
+                        }
                     }
                     else
                     {
-                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE {GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked)}");
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Plik LIKE '%{p}%'");
                     }
                 }
                 else
                 {
-                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Plik LIKE '%{p}%'");
+                    if (m == "brak")
+                    {
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data <= '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(12))}' AND Plik LIKE '%{p}%'");
+                    }
+                    else
+                    {
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data <= '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+                    }
                 }
             }
-            else
+            catch
             {
-                if(m == "brak")
-                {
-                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data <= '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(12))}' AND Plik LIKE '%{p}%'");
-                }
-                else
-                {
-                    LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data <= '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
-                }       
+                SystemSounds.Beep.Play();
+                MessageBox.Show("Nie można wykonać zapytania", "Błąd");
             }
         }
 
