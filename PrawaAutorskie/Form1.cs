@@ -20,7 +20,7 @@ namespace PrawaAutorskie
         public static string initialcatalogConnectionString = null;
         private SqlConnection conn = null;
         private SqlCommand cmd = null;
-        private string version = "0.1.7.5";
+        private string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");

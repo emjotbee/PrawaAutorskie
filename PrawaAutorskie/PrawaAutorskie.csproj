@@ -4,11 +4,25 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>payment_tax_invoice_calculator_icon_188774.ico</ApplicationIcon>
+    <PackageIcon>payment_tax_invoice_calculator_icon_188774.ico</PackageIcon>
+    <AssemblyVersion>0.1.7.5</AssemblyVersion>
+    <FileVersion>0.1.7.5</FileVersion>
+    <RepositoryUrl>https://github.com/emjotbee/UrlopyDelegacje2.0</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageProjectUrl>https://github.com/emjotbee/UrlopyDelegacje2.0</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Desktop\PrawaAutorskie\payment_tax_invoice_calculator_icon_188774.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
