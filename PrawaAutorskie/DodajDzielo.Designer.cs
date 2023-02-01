@@ -81,7 +81,7 @@ namespace PrawaAutorskie
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(260, 165);
             this.richTextBox1.TabIndex = 6;
-            this.richTextBox1.Text = "Opis";
+            this.richTextBox1.Text = "Implementacja funkcjonalności pozwalającej na";
             // 
             // dateTimePicker1
             // 
