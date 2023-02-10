@@ -386,6 +386,8 @@ namespace PrawaAutorskie
                 principalForm.ExecuteSQLStmt($"IF OBJECT_ID(N'GoogleDrive', N'U') IS NULL CREATE TABLE GoogleDrive" + "(applicationName VARCHAR(255), username VARCHAR(255), ClientId VARCHAR(255), ClientSecret VARCHAR(255), AccessToken VARCHAR(255), RefreshToken VARCHAR(255), BackupFolderId VARCHAR(255))", Form1.initialcatalogConnectionString);
                 LoadTable($"SELECT * FROM GoogleDrive");
                 dataGridView1.Enabled = true;
+                textBox10.Clear();
+                CzytajBaze.Enabled = false;
             }
             else
             {
