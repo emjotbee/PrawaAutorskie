@@ -9,6 +9,14 @@ using System.Data.SqlClient;
 using System.Media;
 using System.Threading.Tasks;
 using System.Threading;
+using Google.Apis.Drive.v3;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2;
+using static Google.Apis.Drive.v3.DriveService;
+using Google.Apis.Util.Store;
+using Google.Apis.Services;
+using System.IO;
 
 namespace PrawaAutorskie
 {
@@ -99,7 +107,7 @@ namespace PrawaAutorskie
         {
             FillData(Form1.masterConnectionString);
             comboBox1.SelectedIndex = 1;
-            FillBackupsComboBox();
+            FillBackupsComboBox();           
         }
 
         private void ZrobBackup_Click(object sender, EventArgs e)
@@ -353,6 +361,142 @@ namespace PrawaAutorskie
         {
             e.ThrowException = false;
             e.Cancel = false;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                button3.Enabled = true;
+                button5.Enabled = true;
+                button6.Enabled = true;
+                principalForm.ExecuteSQLStmt($"IF OBJECT_ID(N'GoogleDrive', N'U') IS NULL CREATE TABLE GoogleDrive" + "(applicationName VARCHAR(255), username VARCHAR(255), ClientId VARCHAR(255), ClientSecret VARCHAR(255), AccessToken VARCHAR(255), RefreshToken VARCHAR(255), BackupFolderId VARCHAR(255))", Form1.initialcatalogConnectionString);
+                LoadTable($"SELECT * FROM GoogleDrive");
+                dataGridView1.Enabled = true;
+            }
+            else
+            {
+                button3.Enabled = false;
+                button5.Enabled = false;
+                button6.Enabled = false;
+                dataGridView1.Columns.Clear();
+                dataGridView1.Enabled = false;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            LoadTable($"SELECT * FROM GoogleDrive");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(principalForm.ExecuteSQLStmt($"IF EXISTS (select * from GoogleDrive) UPDATE GoogleDrive SET applicationName='{dataGridView1.Rows[0].Cells[0].Value}', username ='{dataGridView1.Rows[0].Cells[1].Value}',ClientId ='{dataGridView1.Rows[0].Cells[2].Value}', ClientSecret ='{dataGridView1.Rows[0].Cells[3].Value}',AccessToken ='{dataGridView1.Rows[0].Cells[4].Value}',RefreshToken ='{dataGridView1.Rows[0].Cells[5].Value}',BackupFolderId ='{dataGridView1.Rows[0].Cells[6].Value}' else INSERT INTO GoogleDrive (applicationName,username,ClientId,ClientSecret,AccessToken,RefreshToken,BackupFolderId) VALUES ('{dataGridView1.Rows[0].Cells[0].Value}','{dataGridView1.Rows[0].Cells[1].Value},','{dataGridView1.Rows[0].Cells[2].Value}','{dataGridView1.Rows[0].Cells[3].Value}','{dataGridView1.Rows[0].Cells[4].Value}','{dataGridView1.Rows[0].Cells[5].Value}','{dataGridView1.Rows[0].Cells[6].Value}')", Form1.initialcatalogConnectionString))
+            {
+                SystemSounds.Beep.Play();
+                MessageBox.Show("Dane zapisane prawidłowo", "Sukces");
+            }
+        }
+
+        private DriveService GetService()
+        {
+
+            var tokenResponse = new TokenResponse
+            {
+                AccessToken = principalForm.ReadSQL($"SELECT AccessToken FROM GoogleDrive", Form1.initialcatalogConnectionString),
+                RefreshToken = principalForm.ReadSQL($"SELECT RefreshToken FROM GoogleDrive", Form1.initialcatalogConnectionString),
+            };
+
+
+            var applicationName = principalForm.ReadSQL($"SELECT applicationName FROM GoogleDrive", Form1.initialcatalogConnectionString);
+            var username = principalForm.ReadSQL($"SELECT username FROM GoogleDrive", Form1.initialcatalogConnectionString);
+
+
+            var apiCodeFlow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
+            {
+                ClientSecrets = new ClientSecrets
+                {
+                    ClientId = principalForm.ReadSQL($"SELECT ClientId FROM GoogleDrive", Form1.initialcatalogConnectionString),
+                    ClientSecret = principalForm.ReadSQL($"SELECT ClientSecret FROM GoogleDrive", Form1.initialcatalogConnectionString),
+                },
+                Scopes = new[] { Scope.Drive },
+                DataStore = new FileDataStore(applicationName)
+            });
+
+
+    var credential = new UserCredential(apiCodeFlow, username, tokenResponse);
+
+
+            var service = new DriveService(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName
+            });
+    return service;
+        }
+        public string CreateFolder(string folderName)
+        {
+            var service = GetService();
+            var driveFolder = new Google.Apis.Drive.v3.Data.File();
+            driveFolder.Name = folderName;
+            driveFolder.MimeType = "application/vnd.google-apps.folder";
+            var command = service.Files.Create(driveFolder);
+            var file = command.Execute();
+            return file.Id;
+        }
+
+        public string UploadFile(Stream file, string fileName, string fileMime, string folder, string fileDescription)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                DriveService service = GetService();
+
+
+                var driveFile = new Google.Apis.Drive.v3.Data.File();
+                driveFile.Name = fileName;
+                driveFile.Description = fileDescription;
+                driveFile.MimeType = fileMime;
+                driveFile.Parents = new string[] { folder };
+
+
+                var request = service.Files.Create(driveFile, file, fileMime);
+                request.Fields = "id";
+
+                var response = request.Upload();
+                if (response.Status != Google.Apis.Upload.UploadStatus.Completed)
+                    throw response.Exception;
+                Cursor.Current = Cursors.Default;
+                return request.ResponseBody.Id;
+            }
+            catch
+            {
+                Cursor.Current = Cursors.Default;
+                return "error";
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.FileName = "";
+            openFileDialog1.Title = "Załaduj plik backupu";
+            openFileDialog1.Filter = "Backup files (*.bak)|*.bak|All files (*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Stream file = openFileDialog1.OpenFile();
+                var title = openFileDialog1.FileName.Split('\\').Last();
+                //UploadFile(file, openFileDialog1.FileName, "application/octet-stream", principalForm.ReadSQL($"SELECT BackupFolderName FROM GoogleDrive", Form1.initialcatalogConnectionString), openFileDialog1.FileName);
+                if (UploadFile(file,title,"application/octet-stream",principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive",Form1.initialcatalogConnectionString),title) != "error")
+                {
+                    SystemSounds.Hand.Play();
+                    MessageBox.Show("Zapis zakończony sukcesem", "Sukces");
+                }
+                else
+                {
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show("Zapis nie powiódł się", "Błąd");
+                }
+            }
         }
     }
 }
