@@ -233,6 +233,7 @@ namespace PrawaAutorskie
         private void textBox10_Enter(object sender, EventArgs e)
         {
             CzytajBaze.Enabled = true;
+            EnableGoogleDrive(false);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -367,6 +368,18 @@ namespace PrawaAutorskie
         {
             if (checkBox2.Checked)
             {
+                EnableGoogleDrive(true);
+            }
+            else
+            {
+                EnableGoogleDrive(false);
+            }
+        }
+
+        void EnableGoogleDrive(bool _status)
+        {
+            if(_status)
+            {
                 button3.Enabled = true;
                 button5.Enabled = true;
                 button6.Enabled = true;
@@ -381,6 +394,7 @@ namespace PrawaAutorskie
                 button6.Enabled = false;
                 dataGridView1.Columns.Clear();
                 dataGridView1.Enabled = false;
+                checkBox2.Checked = false;
             }
         }
 
