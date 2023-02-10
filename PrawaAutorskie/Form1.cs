@@ -108,6 +108,9 @@ namespace PrawaAutorskie
                 LoadTable(defquery);
                 CalculateSzczegoly();
                 FilterFill(DateTime.Now.Year,true);
+                this.WindowState = FormWindowState.Minimized;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
             }
             else
             {
