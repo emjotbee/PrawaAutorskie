@@ -66,7 +66,7 @@ namespace PrawaAutorskie
             if(Dodaj.Text == "Dodaj")
             {
                 AddItem();
-                principalForm.LoadTable(Form1.defquery);
+                principalForm.LoadTable(Form1.defquery, true);
                 principalForm.CalculateSzczegoly();
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 Close();
@@ -74,7 +74,7 @@ namespace PrawaAutorskie
             else
             {
                 UpdateItem(principalForm.GetDzieloGuid());
-                principalForm.LoadTable(Form1.defquery);
+                principalForm.LoadTable(Form1.defquery, true);
                 principalForm.CalculateSzczegoly();
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 Close();
@@ -125,14 +125,17 @@ namespace PrawaAutorskie
                 textBox2.Text = principalForm.ReadSQL($"SELECT Czas FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
                 dateTimePicker1.Value = Convert.ToDateTime(principalForm.ReadSQL($"SELECT Data FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
                 richTextBox1.Text = principalForm.ReadSQL($"SELECT Opis FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
+                dataGridView1.Rows.Clear();
                 dataGridView1.Rows.Add("baza danych", principalForm.ReadSQL($"SELECT Plik FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
                 Dodaj.Enabled = true;
+                //FillPodobne(_guid);
             }
             catch
             {
                 SystemSounds.Hand.Play();
                 MessageBox.Show("Błąd podczas ładowania dzieła", "Błąd");
             }
+            FillPodobne(_guid);
         }
 
         private void UpdateItem(Guid _guid)
@@ -179,6 +182,43 @@ namespace PrawaAutorskie
                     MessageBox.Show("Nie można dodać dzieła", "Błąd");
                 }
             }          
+        }
+
+        void FillPodobne(Guid _guid)
+        {
+            string dzieloName;
+            string dzieloNameRaw = (principalForm.ReadSQL($"SELECT Plik FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
+            if(dzieloNameRaw.Contains("_"))
+            {
+                dzieloName = (principalForm.ReadSQL($"SELECT Plik FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString)).Split('_')[0];
+            }
+            else
+            {
+                dzieloName = (principalForm.ReadSQL($"SELECT Plik FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString)).Split('.')[0];
+            }
+            DataTable podobne = principalForm.LoadTable($"SELECT Id, Plik, Opis FROM ListaDziel WHERE Plik LIKE '%{dzieloName}%' AND Id <> '{_guid}'", false);
+            if(podobne.Rows.Count > 0)
+            {
+                dataGridView2.Columns.Clear();
+                dataGridView2.DataSource = podobne.DefaultView;
+                dataGridView2.Columns[0].Visible = false;
+                dataGridView2.AutoResizeColumns();
+            }
+        }
+
+        private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                int rowIndex = dataGridView2.CurrentCell.RowIndex;
+                Guid num = (Guid)dataGridView2.Rows[rowIndex].Cells[0].Value;             
+                LoadDzielo(num);
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+                MessageBox.Show("Nie można otworzyć dzieła", "Błąd");
+            }
         }
     }
     }

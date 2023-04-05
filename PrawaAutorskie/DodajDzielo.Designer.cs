@@ -43,17 +43,21 @@ namespace PrawaAutorskie
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.dodajplik = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Dane.SuspendLayout();
             this.Pliki.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // Dodaj
             // 
             this.Dodaj.Enabled = false;
-            this.Dodaj.Location = new System.Drawing.Point(12, 448);
+            this.Dodaj.Location = new System.Drawing.Point(12, 393);
             this.Dodaj.Name = "Dodaj";
-            this.Dodaj.Size = new System.Drawing.Size(135, 51);
+            this.Dodaj.Size = new System.Drawing.Size(147, 60);
             this.Dodaj.TabIndex = 0;
             this.Dodaj.Text = "Dodaj";
             this.Dodaj.UseVisualStyleBackColor = true;
@@ -70,7 +74,7 @@ namespace PrawaAutorskie
             this.Dane.Controls.Add(this.Tytul);
             this.Dane.Location = new System.Drawing.Point(12, 5);
             this.Dane.Name = "Dane";
-            this.Dane.Size = new System.Drawing.Size(276, 281);
+            this.Dane.Size = new System.Drawing.Size(309, 281);
             this.Dane.TabIndex = 2;
             this.Dane.TabStop = false;
             this.Dane.Text = "Dane";
@@ -79,7 +83,7 @@ namespace PrawaAutorskie
             // 
             this.richTextBox1.Location = new System.Drawing.Point(8, 109);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(260, 165);
+            this.richTextBox1.Size = new System.Drawing.Size(295, 165);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "Implementacja funkcjonalności pozwalającej na";
             // 
@@ -87,7 +91,7 @@ namespace PrawaAutorskie
             // 
             this.dateTimePicker1.Location = new System.Drawing.Point(67, 80);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePicker1.Size = new System.Drawing.Size(236, 23);
             this.dateTimePicker1.TabIndex = 5;
             // 
             // Data
@@ -103,7 +107,7 @@ namespace PrawaAutorskie
             // 
             this.textBox2.Location = new System.Drawing.Point(67, 51);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(200, 23);
+            this.textBox2.Size = new System.Drawing.Size(236, 23);
             this.textBox2.TabIndex = 3;
             // 
             // Godziny
@@ -119,7 +123,7 @@ namespace PrawaAutorskie
             // 
             this.textBox1.Location = new System.Drawing.Point(67, 22);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(200, 23);
+            this.textBox1.Size = new System.Drawing.Size(236, 23);
             this.textBox1.TabIndex = 1;
             // 
             // Tytul
@@ -136,7 +140,7 @@ namespace PrawaAutorskie
             this.Pliki.Controls.Add(this.dataGridView1);
             this.Pliki.Location = new System.Drawing.Point(12, 285);
             this.Pliki.Name = "Pliki";
-            this.Pliki.Size = new System.Drawing.Size(276, 157);
+            this.Pliki.Size = new System.Drawing.Size(309, 102);
             this.Pliki.TabIndex = 3;
             this.Pliki.TabStop = false;
             this.Pliki.Text = "Pliki";
@@ -150,14 +154,14 @@ namespace PrawaAutorskie
             this.dataGridView1.Location = new System.Drawing.Point(7, 22);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(260, 129);
+            this.dataGridView1.Size = new System.Drawing.Size(296, 68);
             this.dataGridView1.TabIndex = 0;
             // 
             // dodajplik
             // 
-            this.dodajplik.Location = new System.Drawing.Point(153, 448);
+            this.dodajplik.Location = new System.Drawing.Point(174, 393);
             this.dodajplik.Name = "dodajplik";
-            this.dodajplik.Size = new System.Drawing.Size(135, 51);
+            this.dodajplik.Size = new System.Drawing.Size(147, 60);
             this.dodajplik.TabIndex = 4;
             this.dodajplik.Text = "Dodaj plik";
             this.dodajplik.UseVisualStyleBackColor = true;
@@ -167,11 +171,34 @@ namespace PrawaAutorskie
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.dataGridView2);
+            this.groupBox1.Location = new System.Drawing.Point(327, 5);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(361, 448);
+            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Podobne dzieła";
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.AllowUserToAddRows = false;
+            this.dataGridView2.AllowUserToDeleteRows = false;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(6, 22);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowTemplate.Height = 25;
+            this.dataGridView2.Size = new System.Drawing.Size(349, 417);
+            this.dataGridView2.TabIndex = 0;
+            this.dataGridView2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellDoubleClick);
+            // 
             // DodajDzielo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(300, 502);
+            this.ClientSize = new System.Drawing.Size(700, 457);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dodajplik);
             this.Controls.Add(this.Pliki);
             this.Controls.Add(this.Dane);
@@ -188,6 +215,8 @@ namespace PrawaAutorskie
             this.Dane.PerformLayout();
             this.Pliki.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -207,5 +236,7 @@ namespace PrawaAutorskie
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }

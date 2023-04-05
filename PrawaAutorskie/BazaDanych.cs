@@ -385,7 +385,7 @@ namespace PrawaAutorskie
                 button6.Enabled = true;
                 principalForm.ExecuteSQLStmt($"IF OBJECT_ID(N'GoogleDrive', N'U') IS NULL CREATE TABLE GoogleDrive" + "(applicationName VARCHAR(255), username VARCHAR(255), ClientId VARCHAR(255), ClientSecret VARCHAR(255), AccessToken VARCHAR(255), RefreshToken VARCHAR(255), BackupFolderId VARCHAR(255))", Form1.initialcatalogConnectionString);
                 LoadTable($"SELECT * FROM GoogleDrive");
-                dataGridView1.Enabled = true;
+                //dataGridView1.Enabled = true;
                 textBox10.Clear();
                 CzytajBaze.Enabled = false;
             }
@@ -395,7 +395,7 @@ namespace PrawaAutorskie
                 button5.Enabled = false;
                 button6.Enabled = false;
                 dataGridView1.Columns.Clear();
-                dataGridView1.Enabled = false;
+                //dataGridView1.Enabled = false;
                 checkBox2.Checked = false;
             }
         }

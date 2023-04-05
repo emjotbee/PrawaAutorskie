@@ -105,7 +105,7 @@ namespace PrawaAutorskie
             {
                 PrepareDatabase(masterConnectionString, "PrawaAutorskie");
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                LoadTable(defquery);
+                LoadTable(defquery, true);
                 CalculateSzczegoly();
                 FilterFill(DateTime.Now.Year,true);
                 this.WindowState = FormWindowState.Minimized;
@@ -207,7 +207,7 @@ namespace PrawaAutorskie
             }
         }
 
-        public DataTable LoadTable(string _query)
+        public DataTable LoadTable(string _query, bool _changePrincipal)
         {           
                 // Create a connection  
                 conn = new SqlConnection(initialcatalogConnectionString);
@@ -222,10 +222,13 @@ namespace PrawaAutorskie
                 // Create DataSet, fill it and view in data grid  
                 DataSet ds = new DataSet("ListaDziel");
                 da.Fill(ds, "ListaDziel");
-                dataGridView1.Columns.Clear();
-                dataGridView1.DataSource = ds.Tables["ListaDziel"].DefaultView;
-                dataGridView1.Columns[0].Visible = false;
-                dataGridView1.AutoResizeColumns();
+                if (_changePrincipal)
+                    {
+                        dataGridView1.Columns.Clear();
+                        dataGridView1.DataSource = ds.Tables["ListaDziel"].DefaultView;
+                        dataGridView1.Columns[0].Visible = false;
+                        dataGridView1.AutoResizeColumns();
+                    }
                 DataTable dziela = ds.Tables["ListaDziel"];
                 return dziela;
                 //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;           
@@ -234,7 +237,7 @@ namespace PrawaAutorskie
         private void button2_Click(object sender, EventArgs e)
         {
             RemoveDzielo();
-            LoadTable(defquery);
+            LoadTable(defquery,true);
             CalculateSzczegoly();
             FilterFill(DateTime.Now.Year,true);
         }
@@ -489,23 +492,23 @@ namespace PrawaAutorskie
                         }
                         else
                         {
-                            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE {GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked)}");
+                            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE {GetDbSearch(checkBox1.Checked, checkBox2.Checked, checkBox3.Checked)}",true);
                         }
                     }
                     else
                     {
-                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Plik LIKE '%{p}%'");
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Plik LIKE '%{p}%'", true);
                     }
                 }
                 else
                 {
                     if (m == "brak")
                     {
-                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data <= '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(12))}' AND Plik LIKE '%{p}%'");
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{1}-01' AND Data <= '{r}-{12}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(12))}' AND Plik LIKE '%{p}%'", true);
                     }
                     else
                     {
-                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data <= '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'");
+                        LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{r}-{m}-01' AND Data <= '{r}-{m}-{DateTime.DaysInMonth(Convert.ToInt32(r), Convert.ToInt32(m))}' AND Plik LIKE '%{p}%'", true);
                     }
                 }
             }
@@ -525,7 +528,7 @@ namespace PrawaAutorskie
             checkBox2.Checked = true;
             checkBox3.Checked = true;
             textBox5.Text = "Szukaj w bazie danych bez filtrów";
-            LoadTable(defquery);
+            LoadTable(defquery, true);
             FilterFill(DateTime.Now.Year, true);
         }
 
@@ -543,7 +546,7 @@ namespace PrawaAutorskie
                         Cursor.Current = Cursors.WaitCursor;
                         using (XLWorkbook wb = new XLWorkbook())
                         {
-                            wb.Worksheets.Add(LoadTable($"SELECT Id, Tytuł, Data, Opis, Plik FROM ListaDziel"), "Dzieła");
+                            wb.Worksheets.Add(LoadTable($"SELECT Id, Tytuł, Data, Opis, Plik FROM ListaDziel", true), "Dzieła");
                             wb.SaveAs(Path.Combine(dlg.SelectedPath,"Raport.xlsx"));
                             foreach(DataGridViewRow row in dataGridView1.Rows)
                             {
@@ -620,7 +623,7 @@ namespace PrawaAutorskie
             {
                 ButtonsEnabled(true);
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                LoadTable(defquery);
+                LoadTable(defquery, true);
                 CalculateSzczegoly();
                 FilterFill(DateTime.Now.Year, true);
                 ResetSearch("Search");
