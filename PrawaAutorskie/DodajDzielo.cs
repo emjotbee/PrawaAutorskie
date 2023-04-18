@@ -104,6 +104,7 @@ namespace PrawaAutorskie
 
         private void DodajDzielo_Load(object sender, EventArgs e)
         {
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnCount = 2;
             dataGridView1.Columns[0].Name = "Plik";
@@ -202,7 +203,7 @@ namespace PrawaAutorskie
                 dataGridView2.Columns.Clear();
                 dataGridView2.DataSource = podobne.DefaultView;
                 dataGridView2.Columns[0].Visible = false;
-                dataGridView2.AutoResizeColumns();
+                //dataGridView2.AutoResizeColumns();
             }
         }
 

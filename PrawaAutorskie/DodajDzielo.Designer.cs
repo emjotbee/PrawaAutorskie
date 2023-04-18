@@ -176,7 +176,7 @@ namespace PrawaAutorskie
             this.groupBox1.Controls.Add(this.dataGridView2);
             this.groupBox1.Location = new System.Drawing.Point(327, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(361, 448);
+            this.groupBox1.Size = new System.Drawing.Size(608, 448);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Podobne dzieła";
@@ -188,8 +188,9 @@ namespace PrawaAutorskie
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Location = new System.Drawing.Point(6, 22);
             this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowTemplate.Height = 25;
-            this.dataGridView2.Size = new System.Drawing.Size(349, 417);
+            this.dataGridView2.Size = new System.Drawing.Size(596, 417);
             this.dataGridView2.TabIndex = 0;
             this.dataGridView2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellDoubleClick);
             // 
@@ -197,7 +198,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(700, 457);
+            this.ClientSize = new System.Drawing.Size(947, 457);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dodajplik);
             this.Controls.Add(this.Pliki);
