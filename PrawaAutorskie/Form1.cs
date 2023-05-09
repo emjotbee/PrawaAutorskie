@@ -9,6 +9,8 @@ using DataTable = System.Data.DataTable;
 using ClosedXML.Excel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Drawing;
 
 namespace PrawaAutorskie
 {
@@ -230,6 +232,7 @@ namespace PrawaAutorskie
                         dataGridView1.AutoResizeColumns();
                     }
                 DataTable dziela = ds.Tables["ListaDziel"];
+                ColourResults();
                 return dziela;
                 //dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;           
         }
@@ -781,6 +784,27 @@ namespace PrawaAutorskie
             dodajdzielo.Show();
             base.Enabled = false;
             dodajdzielo.LoadDzielo(GetDzieloGuid());
+        }
+
+        void ColourResults()
+        {
+            foreach (DataGridViewRow item2 in (IEnumerable)dataGridView1.Rows)
+            {
+                string plik = item2.Cells["Plik"].Value.ToString();
+                string last3c = plik.Substring(plik.LastIndexOf("."));
+                if (last3c == ".ps1")
+                {
+                    item2.DefaultCellStyle.BackColor = Color.LightYellow;
+                }
+                if (last3c == ".zip")
+                {
+                    item2.DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                if (last3c == ".docx")
+                {
+                    item2.DefaultCellStyle.BackColor = Color.LightSkyBlue;
+                }
+            }
         }
     }
     }
