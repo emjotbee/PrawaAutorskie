@@ -31,6 +31,7 @@ namespace PrawaAutorskie
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BazaDanych));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button7 = new System.Windows.Forms.Button();
             this.ZapiszICS = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -79,6 +80,7 @@ namespace PrawaAutorskie
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button7);
             this.groupBox1.Controls.Add(this.ZapiszICS);
             this.groupBox1.Controls.Add(this.textBox8);
             this.groupBox1.Controls.Add(this.label5);
@@ -99,10 +101,20 @@ namespace PrawaAutorskie
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(532, 256);
+            this.groupBox1.Size = new System.Drawing.Size(532, 288);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Szczegóły";
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(7, 254);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(519, 28);
+            this.button7.TabIndex = 17;
+            this.button7.Text = "Otwórz folder roboczy";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // ZapiszICS
             // 
@@ -277,7 +289,7 @@ namespace PrawaAutorskie
             this.groupBox2.Controls.Add(this.textBox9);
             this.groupBox2.Controls.Add(this.WyslijRequest);
             this.groupBox2.Controls.Add(this.CzytajBaze);
-            this.groupBox2.Location = new System.Drawing.Point(13, 276);
+            this.groupBox2.Location = new System.Drawing.Point(13, 307);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(532, 362);
             this.groupBox2.TabIndex = 1;
@@ -496,7 +508,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(557, 644);
+            this.ClientSize = new System.Drawing.Size(557, 681);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -560,5 +572,6 @@ namespace PrawaAutorskie
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button button7;
     }
 }

@@ -24,7 +24,7 @@ namespace PrawaAutorskie
         private SqlCommand cmd = null;
         private string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        private static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
+        public static string dataPath = Path.Combine(appDataPath, "PrawaAutorskie");
         private string configFileFullPath = Path.Combine(dataPath, "Config.xml");
         public static string defquery = $"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'";
 
