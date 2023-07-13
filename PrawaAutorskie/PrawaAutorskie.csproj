@@ -8,9 +8,9 @@
     <PackageIcon>payment_tax_invoice_calculator_icon_188774.ico</PackageIcon>
     <AssemblyVersion>0.1.8.9</AssemblyVersion>
     <FileVersion>0.1.8.9</FileVersion>
-    <RepositoryUrl>https://github.com/emjotbee/UrlopyDelegacje2.0</RepositoryUrl>
+    <RepositoryUrl>https://github.com/emjotbee/PrawaAutorskie</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageProjectUrl>https://github.com/emjotbee/UrlopyDelegacje2.0</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/emjotbee/PrawaAutorskie</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
