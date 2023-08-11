@@ -878,6 +878,10 @@ namespace PrawaAutorskie
             
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Dni wolne w tym miesiącu: " + GetDniWolne().ToString(), "Dane z aplikacji UrlopyDelegacje");
+        }
     }
 
     internal class Urlop
