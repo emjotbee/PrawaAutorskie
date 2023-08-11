@@ -51,6 +51,7 @@ namespace PrawaAutorskie
             this.Wyczysc = new System.Windows.Forms.Button();
             this.Zastosuj = new System.Windows.Forms.Button();
             this.Szczegoly = new System.Windows.Forms.GroupBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -72,6 +73,7 @@ namespace PrawaAutorskie
             this.Narzedzia.SuspendLayout();
             this.Filtry.SuspendLayout();
             this.Szczegoly.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -305,6 +307,7 @@ namespace PrawaAutorskie
             // 
             // Szczegoly
             // 
+            this.Szczegoly.Controls.Add(this.pictureBox1);
             this.Szczegoly.Controls.Add(this.textBox7);
             this.Szczegoly.Controls.Add(this.textBox6);
             this.Szczegoly.Controls.Add(this.label9);
@@ -323,6 +326,18 @@ namespace PrawaAutorskie
             this.Szczegoly.TabIndex = 3;
             this.Szczegoly.TabStop = false;
             this.Szczegoly.Text = "Szczegóły";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.pictureBox1.BackgroundImage = global::PrawaAutorskie.Properties.Resources.icon;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pictureBox1.Location = new System.Drawing.Point(269, 42);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(55, 53);
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
             // 
             // textBox7
             // 
@@ -371,7 +386,7 @@ namespace PrawaAutorskie
             this.textBox3.Location = new System.Drawing.Point(162, 72);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(162, 23);
+            this.textBox3.Size = new System.Drawing.Size(101, 23);
             this.textBox3.TabIndex = 6;
             // 
             // textBox2
@@ -379,7 +394,7 @@ namespace PrawaAutorskie
             this.textBox2.Location = new System.Drawing.Point(162, 42);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(162, 23);
+            this.textBox2.Size = new System.Drawing.Size(101, 23);
             this.textBox2.TabIndex = 5;
             // 
             // textBox1
@@ -471,6 +486,7 @@ namespace PrawaAutorskie
             this.Filtry.PerformLayout();
             this.Szczegoly.ResumeLayout(false);
             this.Szczegoly.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -517,6 +533,7 @@ namespace PrawaAutorskie
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Drawing;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace PrawaAutorskie
 {
@@ -31,7 +33,7 @@ namespace PrawaAutorskie
         public Form1()
         {
             InitializeComponent();
-            Text = "PrawaAutorskie " + version + " ©2022 Kamil Kłonica";
+            Text = "PrawaAutorskie " + version + " ©2023 Kamil Kłonica";
         }       
         public bool PrepareDatabase(string connectionString, string dbName)
         {
@@ -137,7 +139,7 @@ namespace PrawaAutorskie
             try
             {
                 textBox1.Text = "70";
-                textBox2.Text = (160 * Convert.ToInt32(textBox1.Text) / 100).ToString();
+                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne()*8)).ToString();
                 textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString))).ToString();
                 textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString);
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
@@ -147,7 +149,7 @@ namespace PrawaAutorskie
             catch
             {
                 textBox1.Text = "70";
-                textBox2.Text = (160 * Convert.ToInt32(textBox1.Text) / 100).ToString();
+                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne() * 8)).ToString();
                 textBox3.Text = textBox2.Text;
                 textBox4.Text = "0";
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
@@ -811,5 +813,78 @@ namespace PrawaAutorskie
         {
             ColourResults();
         }
+
+        int GetDniWolne()
+        {
+            IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+            {
+                for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                    yield return day;
+            }
+            int daysDed = 0;
+            int daysFree = 0;
+            try
+            {
+
+                string dataPath = Path.Combine(appDataPath, "UrlopyDelegacje");
+                string urlopyFileFullPath = Path.Combine(dataPath, DateTime.Now.Year + "Urlopy.xml");
+                if (File.Exists(urlopyFileFullPath))
+                {
+                    pictureBox1.BackColor = Color.LightGreen;
+                    var doc = XDocument.Load(urlopyFileFullPath);
+
+                    var urlopy = doc.Root
+                        .Descendants("Urlop")
+                        .Select(node => new Urlop
+                        {
+                            Od = Convert.ToDateTime(node.Element("Od").Value),
+                            Do = Convert.ToDateTime(node.Element("Do").Value),
+                            Delegacja = Convert.ToBoolean(node.Element("Delegacja").Value),
+                            DniIlosc = Convert.ToInt32(node.Element("DniIlosc").Value),
+                        })
+                        .ToList();
+                            foreach(Urlop url in urlopy)
+                            {
+                                if (!url.Delegacja)
+                                {
+                                    if (url.Od.Month == DateTime.Now.Month || url.Do.Month == DateTime.Now.Month)
+                                    {
+                                        foreach (DateTime day in EachDay(url.Od, url.Do))
+                                        {
+                                            if (day.Month != DateTime.Now.Month)
+                                            {
+                                                if (day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
+                                                {
+                                                    daysDed++;
+                                                }
+
+                                            }
+                                        }
+                                        daysFree += url.DniIlosc;
+                                    }
+                                }
+                            }
+                    return daysFree-daysDed;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+            
+        }
+
     }
+
+    internal class Urlop
+    {
+        public DateTime Od { get; set; }
+        public DateTime Do { get; set; }
+        public bool Delegacja { get; set; }
+        public int DniIlosc { get; set; }
     }
+}
