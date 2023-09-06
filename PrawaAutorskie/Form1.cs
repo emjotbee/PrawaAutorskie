@@ -141,7 +141,7 @@ namespace PrawaAutorskie
                 comboBox4.SelectedIndex = _month -1;
                 textBox1.Text = "70";
                 textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne(_month) *8)).ToString();
-                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString))).ToString();
+                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString))).ToString();
                 textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString);
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
                 textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
@@ -546,6 +546,7 @@ namespace PrawaAutorskie
             textBox5.Text = "Szukaj w bazie danych bez filtrów";
             LoadTable(defquery, true);
             FilterFill(DateTime.Now.Year, true);
+            comboBox4.SelectedIndex = DateTime.Now.Month - 1;
         }
 
 
@@ -892,12 +893,13 @@ namespace PrawaAutorskie
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             SystemSounds.Hand.Play();
-            MessageBox.Show("Dni wolne w tym miesiącu: " + GetDniWolne(comboBox4.SelectedIndex + 1).ToString(), "Dane z aplikacji UrlopyDelegacje©");
+            MessageBox.Show("Dni wolne w miesiącu " + comboBox4.Text + " : " + GetDniWolne(comboBox4.SelectedIndex + 1).ToString(), "Dane z aplikacji UrlopyDelegacje©");
         }
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             CalculateSzczegoly(comboBox4.SelectedIndex+1);
+            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{comboBox4.SelectedIndex + 1}-01' AND Data <= '{DateTime.Now.Year}-{comboBox4.SelectedIndex + 1}-{DateTime.DaysInMonth(DateTime.Now.Year, comboBox4.SelectedIndex + 1)}'", true);
         }
     }
 
