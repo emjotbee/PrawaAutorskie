@@ -110,7 +110,7 @@ namespace PrawaAutorskie
                 PrepareDatabase(masterConnectionString, "PrawaAutorskie");
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 LoadTable(defquery, true);
-                CalculateSzczegoly();
+                CalculateSzczegoly(DateTime.Now.Month);
                 FilterFill(DateTime.Now.Year,true);
                 this.WindowState = FormWindowState.Minimized;
                 this.Show();
@@ -134,14 +134,15 @@ namespace PrawaAutorskie
             base.Enabled = false;
         }
 
-        public void CalculateSzczegoly()
+        public void CalculateSzczegoly(int _month)
         {
             try
             {
+                comboBox4.SelectedIndex = _month -1;
                 textBox1.Text = "70";
-                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne()*8)).ToString();
-                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString))).ToString();
-                textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)}'", initialcatalogConnectionString);
+                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne(_month) *8)).ToString();
+                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{DateTime.Now.Month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString))).ToString();
+                textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString);
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
                 textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
 
@@ -149,11 +150,21 @@ namespace PrawaAutorskie
             catch
             {
                 textBox1.Text = "70";
-                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne() * 8)).ToString();
+                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne(_month) * 8)).ToString();
                 textBox3.Text = textBox2.Text;
                 textBox4.Text = "0";
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
                 textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
+            }
+            if (GetDniWolne(_month) > 0)
+            {
+                textBox2.Font = new Font(textBox2.Font, FontStyle.Bold);
+                textBox3.Font = new Font(textBox3.Font, FontStyle.Bold);
+            }
+            else
+            {
+                textBox2.Font = new Font(textBox2.Font, FontStyle.Regular);
+                textBox3.Font = new Font(textBox3.Font, FontStyle.Regular);
             }
         }
 
@@ -243,7 +254,7 @@ namespace PrawaAutorskie
         {
             RemoveDzielo();
             LoadTable(defquery,true);
-            CalculateSzczegoly();
+            CalculateSzczegoly(DateTime.Now.Month);
             FilterFill(DateTime.Now.Year,true);
         }
         public void RemoveDzielo()
@@ -629,7 +640,7 @@ namespace PrawaAutorskie
                 ButtonsEnabled(true);
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 LoadTable(defquery, true);
-                CalculateSzczegoly();
+                CalculateSzczegoly(DateTime.Now.Month);
                 FilterFill(DateTime.Now.Year, true);
                 ResetSearch("Search");
                 ResetSearch("Filters");
@@ -814,7 +825,7 @@ namespace PrawaAutorskie
             ColourResults();
         }
 
-        int GetDniWolne()
+        int GetDniWolne(int _month)
         {
             IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
             {
@@ -847,11 +858,11 @@ namespace PrawaAutorskie
                             {
                                 if (!url.Delegacja)
                                 {
-                                    if (url.Od.Month == DateTime.Now.Month || url.Do.Month == DateTime.Now.Month)
+                                    if (url.Od.Month == _month || url.Do.Month == _month)
                                     {
                                         foreach (DateTime day in EachDay(url.Od, url.Do))
                                         {
-                                            if (day.Month != DateTime.Now.Month)
+                                            if (day.Month != _month)
                                             {
                                                 if (day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
                                                 {
@@ -880,7 +891,13 @@ namespace PrawaAutorskie
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Dni wolne w tym miesiącu: " + GetDniWolne().ToString(), "Dane z aplikacji UrlopyDelegacje©");
+            SystemSounds.Hand.Play();
+            MessageBox.Show("Dni wolne w tym miesiącu: " + GetDniWolne(comboBox4.SelectedIndex + 1).ToString(), "Dane z aplikacji UrlopyDelegacje©");
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CalculateSzczegoly(comboBox4.SelectedIndex+1);
         }
     }
 

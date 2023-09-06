@@ -51,6 +51,8 @@ namespace PrawaAutorskie
             this.Wyczysc = new System.Windows.Forms.Button();
             this.Zastosuj = new System.Windows.Forms.Button();
             this.Szczegoly = new System.Windows.Forms.GroupBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
@@ -82,7 +84,7 @@ namespace PrawaAutorskie
             this.Lista.Controls.Add(this.dataGridView1);
             this.Lista.Location = new System.Drawing.Point(12, 27);
             this.Lista.Name = "Lista";
-            this.Lista.Size = new System.Drawing.Size(686, 497);
+            this.Lista.Size = new System.Drawing.Size(686, 539);
             this.Lista.TabIndex = 0;
             this.Lista.TabStop = false;
             this.Lista.Text = "Lista";
@@ -96,7 +98,7 @@ namespace PrawaAutorskie
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(674, 469);
+            this.dataGridView1.Size = new System.Drawing.Size(674, 511);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             this.dataGridView1.Sorted += new System.EventHandler(this.dataGridView1_Sorted);
@@ -114,7 +116,7 @@ namespace PrawaAutorskie
             this.Narzedzia.Controls.Add(this.textBox5);
             this.Narzedzia.Controls.Add(this.Wyczysc);
             this.Narzedzia.Controls.Add(this.Zastosuj);
-            this.Narzedzia.Location = new System.Drawing.Point(704, 240);
+            this.Narzedzia.Location = new System.Drawing.Point(704, 282);
             this.Narzedzia.Name = "Narzedzia";
             this.Narzedzia.Size = new System.Drawing.Size(336, 284);
             this.Narzedzia.TabIndex = 2;
@@ -307,6 +309,8 @@ namespace PrawaAutorskie
             // 
             // Szczegoly
             // 
+            this.Szczegoly.Controls.Add(this.comboBox4);
+            this.Szczegoly.Controls.Add(this.label10);
             this.Szczegoly.Controls.Add(this.pictureBox1);
             this.Szczegoly.Controls.Add(this.textBox7);
             this.Szczegoly.Controls.Add(this.textBox6);
@@ -322,10 +326,42 @@ namespace PrawaAutorskie
             this.Szczegoly.Controls.Add(this.label1);
             this.Szczegoly.Location = new System.Drawing.Point(704, 27);
             this.Szczegoly.Name = "Szczegoly";
-            this.Szczegoly.Size = new System.Drawing.Size(336, 207);
+            this.Szczegoly.Size = new System.Drawing.Size(336, 249);
             this.Szczegoly.TabIndex = 3;
             this.Szczegoly.TabStop = false;
             this.Szczegoly.Text = "Szczegóły";
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Styczeń",
+            "Luty",
+            "Marzec",
+            "Kwiecień",
+            "Maj",
+            "Czerwiec",
+            "Lipiec",
+            "Sierpień",
+            "Wrzesień",
+            "Październik",
+            "Listopad",
+            "Grudzień"});
+            this.comboBox4.Location = new System.Drawing.Point(162, 23);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(162, 23);
+            this.comboBox4.TabIndex = 17;
+            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 31);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(47, 15);
+            this.label10.TabIndex = 13;
+            this.label10.Text = "Miesiąc";
             // 
             // pictureBox1
             // 
@@ -333,7 +369,7 @@ namespace PrawaAutorskie
             this.pictureBox1.BackgroundImage = global::PrawaAutorskie.Properties.Resources.icon;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pictureBox1.Location = new System.Drawing.Point(269, 42);
+            this.pictureBox1.Location = new System.Drawing.Point(269, 82);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(55, 53);
             this.pictureBox1.TabIndex = 12;
@@ -342,7 +378,7 @@ namespace PrawaAutorskie
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(162, 176);
+            this.textBox7.Location = new System.Drawing.Point(162, 216);
             this.textBox7.Name = "textBox7";
             this.textBox7.ReadOnly = true;
             this.textBox7.Size = new System.Drawing.Size(162, 23);
@@ -350,7 +386,7 @@ namespace PrawaAutorskie
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(162, 147);
+            this.textBox6.Location = new System.Drawing.Point(162, 187);
             this.textBox6.Name = "textBox6";
             this.textBox6.ReadOnly = true;
             this.textBox6.Size = new System.Drawing.Size(162, 23);
@@ -359,7 +395,7 @@ namespace PrawaAutorskie
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 184);
+            this.label9.Location = new System.Drawing.Point(7, 224);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(88, 15);
             this.label9.TabIndex = 9;
@@ -368,7 +404,7 @@ namespace PrawaAutorskie
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 155);
+            this.label8.Location = new System.Drawing.Point(7, 195);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(76, 15);
             this.label8.TabIndex = 8;
@@ -376,7 +412,7 @@ namespace PrawaAutorskie
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(162, 101);
+            this.textBox4.Location = new System.Drawing.Point(162, 141);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
             this.textBox4.Size = new System.Drawing.Size(162, 23);
@@ -384,7 +420,8 @@ namespace PrawaAutorskie
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(162, 72);
+            this.textBox3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBox3.Location = new System.Drawing.Point(162, 112);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(101, 23);
@@ -392,7 +429,7 @@ namespace PrawaAutorskie
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(162, 42);
+            this.textBox2.Location = new System.Drawing.Point(162, 82);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(101, 23);
@@ -400,7 +437,7 @@ namespace PrawaAutorskie
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(162, 13);
+            this.textBox1.Location = new System.Drawing.Point(162, 53);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(162, 23);
@@ -409,7 +446,7 @@ namespace PrawaAutorskie
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 109);
+            this.label4.Location = new System.Drawing.Point(7, 149);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(88, 15);
             this.label4.TabIndex = 3;
@@ -418,7 +455,7 @@ namespace PrawaAutorskie
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 80);
+            this.label3.Location = new System.Drawing.Point(7, 120);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(153, 15);
             this.label3.TabIndex = 2;
@@ -427,7 +464,7 @@ namespace PrawaAutorskie
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 50);
+            this.label2.Location = new System.Drawing.Point(7, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 15);
             this.label2.TabIndex = 1;
@@ -436,7 +473,7 @@ namespace PrawaAutorskie
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 22);
+            this.label1.Location = new System.Drawing.Point(7, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(104, 15);
             this.label1.TabIndex = 0;
@@ -467,7 +504,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1052, 536);
+            this.ClientSize = new System.Drawing.Size(1052, 578);
             this.Controls.Add(this.Szczegoly);
             this.Controls.Add(this.Narzedzia);
             this.Controls.Add(this.Lista);
@@ -535,6 +572,8 @@ namespace PrawaAutorskie
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.Label label10;
     }
 }
 

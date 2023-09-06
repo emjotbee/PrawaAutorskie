@@ -67,7 +67,7 @@ namespace PrawaAutorskie
             {
                 AddItem();
                 principalForm.LoadTable(Form1.defquery, true);
-                principalForm.CalculateSzczegoly();
+                principalForm.CalculateSzczegoly(DateTime.Now.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 Close();
             }
@@ -75,7 +75,7 @@ namespace PrawaAutorskie
             {
                 UpdateItem(principalForm.GetDzieloGuid());
                 principalForm.LoadTable(Form1.defquery, true);
-                principalForm.CalculateSzczegoly();
+                principalForm.CalculateSzczegoly(DateTime.Now.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 Close();
             }
