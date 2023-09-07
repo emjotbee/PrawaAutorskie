@@ -66,16 +66,16 @@ namespace PrawaAutorskie
             if(Dodaj.Text == "Dodaj")
             {
                 AddItem();
-                principalForm.LoadTable(Form1.defquery, true);
-                principalForm.CalculateSzczegoly(DateTime.Now.Month);
+                principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, dateTimePicker1.Value.Month)}'", true);
+                principalForm.CalculateSzczegoly(dateTimePicker1.Value.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 Close();
             }
             else
             {
                 UpdateItem(principalForm.GetDzieloGuid());
-                principalForm.LoadTable(Form1.defquery, true);
-                principalForm.CalculateSzczegoly(DateTime.Now.Month);
+                principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, dateTimePicker1.Value.Month)}'", true);
+                principalForm.CalculateSzczegoly(dateTimePicker1.Value.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 Close();
             }

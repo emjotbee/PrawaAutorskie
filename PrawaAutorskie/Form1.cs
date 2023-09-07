@@ -252,20 +252,22 @@ namespace PrawaAutorskie
 
         private void button2_Click(object sender, EventArgs e)
         {
-            RemoveDzielo();
-            LoadTable(defquery,true);
-            CalculateSzczegoly(DateTime.Now.Month);
+            DateTime data = RemoveDzielo();
+            LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{data.Month}-01' AND Data <= '{DateTime.Now.Year}-{data.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, data.Month)}'", true);
+            CalculateSzczegoly(data.Month);
             FilterFill(DateTime.Now.Year,true);
         }
-        public void RemoveDzielo()
+        public DateTime RemoveDzielo()
         {
             try
             {
                 if(dataGridView1.CurrentCell != null)
                 {
                     int _rowIndex = dataGridView1.CurrentCell.RowIndex;
+                    DateTime data = (DateTime)dataGridView1.Rows[_rowIndex].Cells[3].Value;
                     Guid num = (Guid)dataGridView1.Rows[_rowIndex].Cells[0].Value;
                     ExecuteSQLStmt($"DELETE FROM ListaDziel WHERE Id = '{num}'", initialcatalogConnectionString);
+                    return data;
                 }
                 else
                 {
@@ -276,6 +278,7 @@ namespace PrawaAutorskie
             {
                 SystemSounds.Beep.Play();
                 MessageBox.Show("Brak dzieła do usunięcia", "Błąd");
+                return DateTime.Now;
             }
         }
 
