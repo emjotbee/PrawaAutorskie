@@ -69,6 +69,7 @@ namespace PrawaAutorskie
                 principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, dateTimePicker1.Value.Month)}'", true);
                 principalForm.CalculateSzczegoly(dateTimePicker1.Value.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
+                principalForm.GetData();
                 Close();
             }
             else
@@ -77,6 +78,7 @@ namespace PrawaAutorskie
                 principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, dateTimePicker1.Value.Month)}'", true);
                 principalForm.CalculateSzczegoly(dateTimePicker1.Value.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
+                principalForm.GetData();
                 Close();
             }
         }

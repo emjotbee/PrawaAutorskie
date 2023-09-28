@@ -70,6 +70,7 @@ namespace PrawaAutorskie
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.formsPlot1 = new ScottPlot.FormsPlot();
             this.Lista.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.Narzedzia.SuspendLayout();
@@ -82,9 +83,9 @@ namespace PrawaAutorskie
             // Lista
             // 
             this.Lista.Controls.Add(this.dataGridView1);
-            this.Lista.Location = new System.Drawing.Point(12, 27);
+            this.Lista.Location = new System.Drawing.Point(12, 194);
             this.Lista.Name = "Lista";
-            this.Lista.Size = new System.Drawing.Size(686, 539);
+            this.Lista.Size = new System.Drawing.Size(686, 372);
             this.Lista.TabIndex = 0;
             this.Lista.TabStop = false;
             this.Lista.Text = "Lista";
@@ -94,11 +95,11 @@ namespace PrawaAutorskie
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 22);
+            this.dataGridView1.Location = new System.Drawing.Point(6, 21);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(674, 511);
+            this.dataGridView1.Size = new System.Drawing.Size(674, 342);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             this.dataGridView1.Sorted += new System.EventHandler(this.dataGridView1_Sorted);
@@ -500,11 +501,20 @@ namespace PrawaAutorskie
             this.toolStripMenuItem1.Size = new System.Drawing.Size(85, 20);
             this.toolStripMenuItem1.Text = "Baza danych";
             // 
+            // formsPlot1
+            // 
+            this.formsPlot1.Location = new System.Drawing.Point(12, 27);
+            this.formsPlot1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.formsPlot1.Name = "formsPlot1";
+            this.formsPlot1.Size = new System.Drawing.Size(680, 164);
+            this.formsPlot1.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1052, 578);
+            this.Controls.Add(this.formsPlot1);
             this.Controls.Add(this.Szczegoly);
             this.Controls.Add(this.Narzedzia);
             this.Controls.Add(this.Lista);
@@ -574,6 +584,7 @@ namespace PrawaAutorskie
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.Label label10;
+        private ScottPlot.FormsPlot formsPlot1;
     }
 }
 

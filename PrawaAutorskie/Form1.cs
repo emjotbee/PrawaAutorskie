@@ -104,19 +104,32 @@ namespace PrawaAutorskie
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            CreateConfigXML();
-            if (bazad.CheckSQLConnection(masterConnectionString))
+            try
             {
-                PrepareDatabase(masterConnectionString, "PrawaAutorskie");
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                LoadTable(defquery, true);
-                CalculateSzczegoly(DateTime.Now.Month);
-                FilterFill(DateTime.Now.Year,true);
-                this.WindowState = FormWindowState.Minimized;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
+                CreateConfigXML();
+                if (bazad.CheckSQLConnection(masterConnectionString))
+                {
+                    PrepareDatabase(masterConnectionString, "PrawaAutorskie");
+                    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    LoadTable(defquery, true);
+                    CalculateSzczegoly(DateTime.Now.Month);
+                    FilterFill(DateTime.Now.Year, true);
+                    GetData();
+                    this.WindowState = FormWindowState.Minimized;
+                    this.Show();
+                    this.WindowState = FormWindowState.Normal;
+                }
+                else
+                {
+                    SystemSounds.Beep.Play();
+                    MessageBox.Show("Brak połączenia z bazą danych. Sprawdź poprawność connection stringa", "Błąd");
+                    BazaDanych baza = new BazaDanych();
+                    baza.Show();
+                    baza.TopMost = true;
+                    base.Enabled = false;
+                }
             }
-            else
+            catch
             {
                 SystemSounds.Beep.Play();
                 MessageBox.Show("Brak połączenia z bazą danych. Sprawdź poprawność connection stringa", "Błąd");
@@ -124,7 +137,7 @@ namespace PrawaAutorskie
                 baza.Show();
                 baza.TopMost = true;
                 base.Enabled = false;
-            }
+            }            
         }
 
         private void DodajDzielo_Click(object sender, EventArgs e)
@@ -133,6 +146,36 @@ namespace PrawaAutorskie
             dodajdzielo.Show();
             base.Enabled = false;
         }
+
+        void CreateChart(double[] dataX, double[] dataY)
+        {
+            formsPlot1.Plot.XLabel("Miesiąc");
+            formsPlot1.Plot.YLabel("Liczba dzieł");
+            formsPlot1.Plot.Title("Ilość dzieł w miesiącach");
+
+            formsPlot1.Plot.AddScatter(dataX, dataY);
+            formsPlot1.Refresh();
+        }
+
+        public void GetData()
+        {
+            List<ChartData> chartList = new List<ChartData>();
+            ChartData chartData = new ChartData();
+            chartList = chartData.GetChartData();
+
+            double[] dataX = new double[chartList.Count];
+            double[] dataY = new double[chartList.Count];
+
+            int i = 0;
+            foreach (ChartData data in chartList)
+            {
+                dataX[i] = data.Month;
+                dataY[i] = data.IloscDziel;
+                i++;
+            }
+            CreateChart(dataX, dataY);
+        }
+
 
         public void CalculateSzczegoly(int _month)
         {
@@ -256,6 +299,7 @@ namespace PrawaAutorskie
             LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{data.Month}-01' AND Data <= '{DateTime.Now.Year}-{data.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, data.Month)}'", true);
             CalculateSzczegoly(data.Month);
             FilterFill(DateTime.Now.Year,true);
+            GetData();
         }
         public DateTime RemoveDzielo()
         {
@@ -913,4 +957,28 @@ namespace PrawaAutorskie
         public bool Delegacja { get; set; }
         public int DniIlosc { get; set; }
     }
+
+    internal class ChartData
+    {
+        public int Month { get; set; }
+        public double IloscDziel { get; set; }
+
+        public List<ChartData> GetChartData()
+        {
+            Form1 principalForm = System.Windows.Forms.Application.OpenForms.OfType<Form1>().FirstOrDefault();
+            List<ChartData> chartList = new List<ChartData>();
+
+            for (int i = 1; i < 13; i++)
+            {
+                ChartData chartData = new ChartData();
+                double iloscDziel = Convert.ToDouble(principalForm.ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{i}-01' AND Data <= '{DateTime.Now.Year}-{i}-{DateTime.DaysInMonth(DateTime.Now.Year, i)}'", Form1.initialcatalogConnectionString));
+                chartData.Month = i;
+                chartData.IloscDziel = iloscDziel;
+                chartList.Add(chartData);
+            }
+            return chartList;
+
+        }
+    }
+
 }
