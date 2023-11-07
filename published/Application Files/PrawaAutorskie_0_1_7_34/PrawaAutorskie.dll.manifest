@@ -153,13 +153,13 @@
       <dsig:DigestValue>brCETFUpz6zk38mFPrnMgfmqmvZvvQAWqTqfhAmlewo=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="PrawaAutorskie.dll" size="483840">
+  <file name="PrawaAutorskie.dll" size="480768">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>LY95LtHc1jE8XaLQLgSvdTltXOGOzot5jXDaPebrIkE=</dsig:DigestValue>
+      <dsig:DigestValue>JY6MaHB+QpAHrjBwuuCIHIVmqXlnKHAZC5j+8RSQcIc=</dsig:DigestValue>
     </hash>
   </file>
   <file name="PrawaAutorskie.exe" size="195072">

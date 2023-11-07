@@ -107,8 +107,7 @@ namespace PrawaAutorskie
         {
             FillData(Form1.masterConnectionString);
             comboBox1.SelectedIndex = 1;
-            FillBackupsComboBox();
-            MessageBox.Show(GetBackupStatus(principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive", Form1.initialcatalogConnectionString), "PrawaAutorse05102023.bak").ToString());
+            FillBackupsComboBox();            
         }
 
         private void ZrobBackup_Click(object sender, EventArgs e)
