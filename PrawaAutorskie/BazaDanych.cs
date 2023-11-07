@@ -107,7 +107,8 @@ namespace PrawaAutorskie
         {
             FillData(Form1.masterConnectionString);
             comboBox1.SelectedIndex = 1;
-            FillBackupsComboBox();           
+            FillBackupsComboBox();
+            MessageBox.Show(GetBackupStatus(principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive", Form1.initialcatalogConnectionString), "PrawaAutorse05102023.bak").ToString());
         }
 
         private void ZrobBackup_Click(object sender, EventArgs e)
@@ -492,6 +493,27 @@ namespace PrawaAutorskie
             }
         }
 
+        public bool GetBackupStatus (string folder, string _fileName)
+        {
+            try
+            {
+                DriveService service = GetService();
+                // Define parameters of request
+                FilesResource.ListRequest listRequest = service.Files.List();
+                listRequest.PageSize = 100;
+                listRequest.Fields = "nextPageToken, files(id, name)";
+                listRequest.Q = $"'{folder}' in parents";
+                // List files
+                IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute().Files;
+                bool contains = files.Any(p => p.Name == _fileName);
+                return contains;          
+                }
+                catch
+                {
+                    return false;
+                }
+        }
+
         private void button6_Click(object sender, EventArgs e)
         {
             openFileDialog1.FileName = "";
@@ -502,7 +524,7 @@ namespace PrawaAutorskie
                 Stream file = openFileDialog1.OpenFile();
                 var title = openFileDialog1.FileName.Split('\\').Last();
                 //UploadFile(file, openFileDialog1.FileName, "application/octet-stream", principalForm.ReadSQL($"SELECT BackupFolderName FROM GoogleDrive", Form1.initialcatalogConnectionString), openFileDialog1.FileName);
-                if (UploadFile(file,title,"application/octet-stream",principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive",Form1.initialcatalogConnectionString),title) != "error")
+                if (UploadFile(file,title,"application/octet-stream",principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive",Form1.initialcatalogConnectionString),title) != "error" && GetBackupStatus(principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive", Form1.initialcatalogConnectionString), title))
                 {
                     SystemSounds.Hand.Play();
                     MessageBox.Show("Zapis zakończony sukcesem", "Sukces");
