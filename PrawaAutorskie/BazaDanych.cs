@@ -284,6 +284,12 @@ namespace PrawaAutorskie
         {
             try
             {
+                int i = 0;
+                int tableRows = Convert.ToInt32(principalForm.ReadSQL($"SELECT count(*) FROM Backups", Form1.initialcatalogConnectionString));
+                if(tableRows < 10)
+                {
+                    tableRows = 10;
+                }
                 // Open the connection  
                 if (CheckSQLConnection(Form1.initialcatalogConnectionString))
                 {
@@ -293,14 +299,15 @@ namespace PrawaAutorskie
                     conn.Open();
                     // Create a data adapter  
                     SqlDataAdapter da = new SqlDataAdapter
-                    ($"SELECT * FROM Backups", conn);
+                    ($"SELECT * from Backups", conn);
                     // Create DataSet, fill it and view in data grid  
                     DataSet ds = new DataSet("Backups");
                     da.Fill(ds, "Backups");
                     DataTable dziela = ds.Tables["Backups"];
                     foreach (DataRow row in ds.Tables[0].Rows)
                     {
-                        if (!comboBox2.Items.Contains((string)row["Nazwa"]))
+                        i++;
+                        if (!comboBox2.Items.Contains((string)row["Nazwa"]) && i > tableRows-10)
                         {
                             comboBox2.Items.Add((string)row["Nazwa"]);
                         }
