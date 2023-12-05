@@ -216,6 +216,8 @@ namespace PrawaAutorskie
                 int rowIndex = dataGridView2.CurrentCell.RowIndex;
                 Guid num = (Guid)dataGridView2.Rows[rowIndex].Cells[0].Value;             
                 LoadDzielo(num);
+                Dodaj.Enabled = false;
+                dodajplik.Enabled = false;
             }
             catch
             {
