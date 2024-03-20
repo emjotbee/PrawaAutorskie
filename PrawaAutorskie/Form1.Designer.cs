@@ -135,6 +135,7 @@ namespace PrawaAutorskie
             this.checkBox3.TabIndex = 18;
             this.checkBox3.Text = "Plik";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // Raport
             // 
@@ -235,6 +236,7 @@ namespace PrawaAutorskie
             this.checkBox2.TabIndex = 17;
             this.checkBox2.Text = "Opis";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // Pobierz
             // 
@@ -267,6 +269,7 @@ namespace PrawaAutorskie
             this.checkBox1.TabIndex = 16;
             this.checkBox1.Text = "Tytuł";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // DodajDzielo
             // 

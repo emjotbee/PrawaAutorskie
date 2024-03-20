@@ -115,6 +115,7 @@ namespace PrawaAutorskie
                     CalculateSzczegoly(DateTime.Now.Month);
                     FilterFill(DateTime.Now.Year, true);
                     GetData();
+                    //SetTextBoxCompleteSource(textBox5, LoadTable($"SELECT Plik FROM ListaDziel", false));
                     this.WindowState = FormWindowState.Minimized;
                     this.Show();
                     this.WindowState = FormWindowState.Normal;
@@ -183,7 +184,7 @@ namespace PrawaAutorskie
             {
                 comboBox4.SelectedIndex = _month -1;
                 textBox1.Text = "70";
-                textBox2.Text = (((160 * Convert.ToInt32(textBox1.Text) / 100)) - (GetDniWolne(_month) *8)).ToString();
+                textBox2.Text = ((160 - (GetDniWolne(_month) * 8)) * Convert.ToInt32(textBox1.Text) / 100).ToString();
                 textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString))).ToString();
                 textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString);
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
@@ -947,6 +948,43 @@ namespace PrawaAutorskie
         {
             CalculateSzczegoly(comboBox4.SelectedIndex+1);
             LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{comboBox4.SelectedIndex + 1}-01' AND Data <= '{DateTime.Now.Year}-{comboBox4.SelectedIndex + 1}-{DateTime.DaysInMonth(DateTime.Now.Year, comboBox4.SelectedIndex + 1)}'", true);
+        }
+
+        void SetTextBoxCompleteSource(TextBox _textbox, DataTable _table)
+        {
+            string[] array = _table.Rows.OfType<DataRow>().Select(k => k[0].ToString()).ToArray();
+            AutoCompleteStringCollection allowedTypes = new AutoCompleteStringCollection();
+            allowedTypes.AddRange(array);
+            _textbox.AutoCompleteCustomSource = allowedTypes;
+            _textbox.AutoCompleteMode = AutoCompleteMode.Suggest;
+            _textbox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+        }
+
+        void CheckAutoComplete()
+        {
+            if (!checkBox1.Checked && !checkBox2.Checked && checkBox3.Checked)
+            {
+                SetTextBoxCompleteSource(textBox5, LoadTable($"SELECT Plik FROM ListaDziel", false));
+            }
+            else
+            {
+                textBox5.AutoCompleteMode = AutoCompleteMode.None;
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckAutoComplete();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckAutoComplete();
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckAutoComplete();
         }
     }
 
