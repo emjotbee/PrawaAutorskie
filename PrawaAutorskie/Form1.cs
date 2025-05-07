@@ -33,7 +33,7 @@ namespace PrawaAutorskie
         public Form1()
         {
             InitializeComponent();
-            Text = "PrawaAutorskie " + version + " ©2023 Kamil Kłonica";
+            Text = "PrawaAutorskie " + version + " ©2025 Kamil Kłonica";
         }       
         public bool PrepareDatabase(string connectionString, string dbName)
         {
@@ -150,6 +150,7 @@ namespace PrawaAutorskie
 
         void CreateChart(double[] dataX, double[] dataY)
         {
+            formsPlot1.Plot.Clear();
             formsPlot1.Plot.XLabel("Miesiąc");
             formsPlot1.Plot.YLabel("Liczba dzieł");
             formsPlot1.Plot.Title("Ilość dzieł w miesiącach");

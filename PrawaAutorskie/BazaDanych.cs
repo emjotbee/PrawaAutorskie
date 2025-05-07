@@ -17,6 +17,7 @@ using static Google.Apis.Drive.v3.DriveService;
 using Google.Apis.Util.Store;
 using Google.Apis.Services;
 using System.IO;
+using Google.Apis.Upload;
 
 namespace PrawaAutorskie
 {
@@ -497,6 +498,60 @@ namespace PrawaAutorskie
                 Cursor.Current = Cursors.Default;
                 return "error";
             }
+
+        }
+
+        public async Task UploadFileAsync(Stream file, string fileName, string fileMime, string folder, string fileDescription)
+        {
+            try
+            {
+                DriveService service = GetService();
+
+
+                var driveFile = new Google.Apis.Drive.v3.Data.File();
+                driveFile.Name = fileName;
+                driveFile.Description = fileDescription;
+                driveFile.MimeType = fileMime;
+                driveFile.Parents = new string[] { folder };
+
+
+                var request = service.Files.Create(driveFile, file, fileMime);
+                request.Fields = "id";
+                request.ProgressChanged += (progress) =>
+                {
+                    // Update UI with progress
+                    if (progress.Status == UploadStatus.Uploading)
+                    {
+                        int percentComplete = (int)((double)progress.BytesSent / file.Length * 100);
+                        // Safely update UI from background thread
+                        this.Invoke(new Action(() =>
+                        {
+                            progressBar1.Value = percentComplete;
+                        }));
+                    }
+                    else if (progress.Status == UploadStatus.Completed)
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            progressBar1.Value = 100;
+                        }));
+                    }
+                    else if (progress.Status == UploadStatus.Failed)
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            SystemSounds.Beep.Play();
+                            MessageBox.Show(progress.Exception.Message, "Błąd");
+                        }));
+                    }
+                };
+                await request.UploadAsync();
+            }
+            catch
+            {
+
+            }
+
         }
 
         public bool GetBackupStatus (string folder, string _fileName)
@@ -520,17 +575,19 @@ namespace PrawaAutorskie
                 }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private async void button6_Click(object sender, EventArgs e)
         {
+            progressBar1.Value = 0;
             openFileDialog1.FileName = "";
             openFileDialog1.Title = "Załaduj plik backupu";
             openFileDialog1.Filter = "Backup files (*.bak)|*.bak|All files (*.*)|*.*";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                base.Enabled = false;
                 Stream file = openFileDialog1.OpenFile();
                 var title = openFileDialog1.FileName.Split('\\').Last();
-                //UploadFile(file, openFileDialog1.FileName, "application/octet-stream", principalForm.ReadSQL($"SELECT BackupFolderName FROM GoogleDrive", Form1.initialcatalogConnectionString), openFileDialog1.FileName);
-                if (UploadFile(file,title,"application/octet-stream",principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive",Form1.initialcatalogConnectionString),title) != "error" && GetBackupStatus(principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive", Form1.initialcatalogConnectionString), title))
+                await UploadFileAsync(file, title, "application/octet-stream", principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive", Form1.initialcatalogConnectionString), title);
+                if (GetBackupStatus(principalForm.ReadSQL($"SELECT BackupFolderId FROM GoogleDrive", Form1.initialcatalogConnectionString), title))
                 {
                     SystemSounds.Hand.Play();
                     MessageBox.Show("Zapis zakończony sukcesem", "Sukces");
@@ -540,6 +597,8 @@ namespace PrawaAutorskie
                     SystemSounds.Beep.Play();
                     MessageBox.Show("Zapis nie powiódł się", "Błąd");
                 }
+                base.Enabled = true;
+                progressBar1.Value = 0;
             }
         }
 
