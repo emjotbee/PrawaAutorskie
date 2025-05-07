@@ -150,7 +150,6 @@ namespace PrawaAutorskie
 
         void CreateChart(double[] dataX, double[] dataY)
         {
-            formsPlot1.Plot.Clear();
             formsPlot1.Plot.XLabel("Miesiąc");
             formsPlot1.Plot.YLabel("Liczba dzieł");
             formsPlot1.Plot.Title("Ilość dzieł w miesiącach");
