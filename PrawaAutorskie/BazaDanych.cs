@@ -108,7 +108,7 @@ namespace PrawaAutorskie
         {
             FillData(Form1.masterConnectionString);
             comboBox1.SelectedIndex = 1;
-            FillBackupsComboBox();            
+            FillBackupsComboBox();
         }
 
         private void ZrobBackup_Click(object sender, EventArgs e)
@@ -504,7 +504,7 @@ namespace PrawaAutorskie
         public async Task UploadFileAsync(Stream file, string fileName, string fileMime, string folder, string fileDescription)
         {
             try
-            {
+            {   
                 DriveService service = GetService();
 
 
@@ -526,6 +526,7 @@ namespace PrawaAutorskie
                         // Safely update UI from background thread
                         this.Invoke(new Action(() =>
                         {
+                            label10.Text = (progress.BytesSent).ToString()+ "/" + file.Length.ToString()+ " bytes sent";
                             progressBar1.Value = percentComplete;
                         }));
                     }
@@ -534,6 +535,7 @@ namespace PrawaAutorskie
                         this.Invoke(new Action(() =>
                         {
                             progressBar1.Value = 100;
+                            label10.Text = "";
                         }));
                     }
                     else if (progress.Status == UploadStatus.Failed)
@@ -542,6 +544,7 @@ namespace PrawaAutorskie
                         {
                             SystemSounds.Beep.Play();
                             MessageBox.Show(progress.Exception.Message, "Błąd");
+                            label10.Text = "";
                         }));
                     }
                 };

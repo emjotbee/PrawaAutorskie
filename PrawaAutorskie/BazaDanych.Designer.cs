@@ -51,6 +51,7 @@ namespace PrawaAutorskie
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -273,6 +274,7 @@ namespace PrawaAutorskie
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.progressBar1);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.checkBox2);
@@ -293,22 +295,30 @@ namespace PrawaAutorskie
             this.groupBox2.Controls.Add(this.CzytajBaze);
             this.groupBox2.Location = new System.Drawing.Point(13, 307);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(532, 362);
+            this.groupBox2.Size = new System.Drawing.Size(532, 376);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Narzędzia";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(180, 258);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(0, 15);
+            this.label10.TabIndex = 18;
             // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(21, 250);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(502, 23);
+            this.progressBar1.Size = new System.Drawing.Size(502, 31);
             this.progressBar1.TabIndex = 19;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(21, 276);
+            this.label9.Location = new System.Drawing.Point(21, 290);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(132, 15);
             this.label9.TabIndex = 17;
@@ -317,7 +327,7 @@ namespace PrawaAutorskie
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(7, 277);
+            this.checkBox2.Location = new System.Drawing.Point(6, 291);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(15, 14);
             this.checkBox2.TabIndex = 18;
@@ -327,7 +337,7 @@ namespace PrawaAutorskie
             // button6
             // 
             this.button6.Enabled = false;
-            this.button6.Location = new System.Drawing.Point(361, 297);
+            this.button6.Location = new System.Drawing.Point(361, 311);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(162, 57);
             this.button6.TabIndex = 17;
@@ -349,7 +359,7 @@ namespace PrawaAutorskie
             // button5
             // 
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(188, 297);
+            this.button5.Location = new System.Drawing.Point(188, 311);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(167, 57);
             this.button5.TabIndex = 16;
@@ -381,7 +391,7 @@ namespace PrawaAutorskie
             // button3
             // 
             this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(21, 297);
+            this.button3.Location = new System.Drawing.Point(21, 311);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(161, 57);
             this.button3.TabIndex = 15;
@@ -517,7 +527,7 @@ namespace PrawaAutorskie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(557, 681);
+            this.ClientSize = new System.Drawing.Size(557, 687);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -583,5 +593,6 @@ namespace PrawaAutorskie
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label10;
     }
 }
