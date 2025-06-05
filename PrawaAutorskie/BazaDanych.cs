@@ -535,7 +535,7 @@ namespace PrawaAutorskie
                         this.Invoke(new Action(() =>
                         {
                             progressBar1.Value = 100;
-                            label10.Text = "";
+                            
                         }));
                     }
                     else if (progress.Status == UploadStatus.Failed)
@@ -544,7 +544,6 @@ namespace PrawaAutorskie
                         {
                             SystemSounds.Beep.Play();
                             MessageBox.Show(progress.Exception.Message, "Błąd");
-                            label10.Text = "";
                         }));
                     }
                 };
@@ -602,6 +601,7 @@ namespace PrawaAutorskie
                 }
                 base.Enabled = true;
                 progressBar1.Value = 0;
+                label10.Text = "";
             }
         }
 

@@ -303,7 +303,7 @@ namespace PrawaAutorskie
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(180, 258);
+            this.label10.Location = new System.Drawing.Point(251, 290);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(0, 15);
             this.label10.TabIndex = 18;
