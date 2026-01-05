@@ -33,7 +33,7 @@ namespace PrawaAutorskie
         public Form1()
         {
             InitializeComponent();
-            Text = "PrawaAutorskie " + version + " ©2025 Kamil Kłonica";
+            Text = "PrawaAutorskie " + version + " ©2026 Kamil Kłonica";
         }       
         public bool PrepareDatabase(string connectionString, string dbName)
         {
