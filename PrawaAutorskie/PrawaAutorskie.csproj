@@ -14,17 +14,53 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.95.4" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.59.0.2958" />
-    <PackageReference Include="ScottPlot.WinForms" Version="4.1.67" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\..\..\Desktop\PrawaAutorskie\payment_tax_invoice_calculator_icon_188774.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>..\published\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\published\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat">
+      <HintPath>..\published\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>..\published\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>..\published\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices">
+      <HintPath>..\published\Google.Apis.Auth.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>..\published\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Drive.v3">
+      <HintPath>..\published\Google.Apis.Drive.v3.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\published\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ScottPlot">
+      <HintPath>..\published\ScottPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="ScottPlot.WinForms">
+      <HintPath>..\published\ScottPlot.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SqlClient">
+      <HintPath>..\published\System.Data.SqlClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

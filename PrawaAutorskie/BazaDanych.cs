@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Media;
 using System.Threading.Tasks;
 using System.Threading;
