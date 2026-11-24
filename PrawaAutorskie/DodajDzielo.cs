@@ -25,6 +25,13 @@ namespace PrawaAutorskie
         {
             try
             {
+                if (!int.TryParse(textBox2.Text, out int czas))
+                {
+                    SystemSounds.Hand.Play();
+                    MessageBox.Show("Pole Czas musi być liczbą całkowitą", "Błąd");
+                    return;
+                }
+
                 SqlCommand cmd = null;
                 string connectionString = Form1.initialcatalogConnectionString;
                 byte[] file;
@@ -40,9 +47,14 @@ namespace PrawaAutorskie
                     try
                     {
                         connection.Open();
-                        using (cmd = new SqlCommand("INSERT INTO ListaDziel(Id, Tytuł, Czas, Data, Opis, PlikDirect, Plik) " + $"VALUES (default, '{textBox1.Text}',{textBox2.Text}, '{dateTimePicker1.Value}','{richTextBox1.Text}',@File,'{dataGridView1.Rows[0].Cells[1].Value}') ", connection))
+                        using (cmd = new SqlCommand("INSERT INTO ListaDziel(Id, Tytuł, Czas, Data, Opis, PlikDirect, Plik) VALUES (default, @Tytul, @Czas, @Data, @Opis, @File, @Plik)", connection))
                         {
+                            cmd.Parameters.AddWithValue("@Tytul", textBox1.Text);
+                            cmd.Parameters.AddWithValue("@Czas", czas);
+                            cmd.Parameters.AddWithValue("@Data", dateTimePicker1.Value.Date);
+                            cmd.Parameters.AddWithValue("@Opis", richTextBox1.Text);
                             cmd.Parameters.Add("@File", SqlDbType.VarBinary, file.Length).Value = file;
+                            cmd.Parameters.AddWithValue("@Plik", dataGridView1.Rows[0].Cells[1].Value?.ToString() ?? string.Empty);
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -66,7 +78,7 @@ namespace PrawaAutorskie
             if(Dodaj.Text == "Dodaj")
             {
                 AddItem();
-                principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, dateTimePicker1.Value.Month)}'", true);
+                principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{dateTimePicker1.Value.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{dateTimePicker1.Value.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(dateTimePicker1.Value.Year, dateTimePicker1.Value.Month)}'", true);
                 principalForm.CalculateSzczegoly(dateTimePicker1.Value.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 principalForm.GetData();
@@ -75,7 +87,7 @@ namespace PrawaAutorskie
             else
             {
                 UpdateItem(principalForm.GetDzieloGuid());
-                principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{DateTime.Now.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(DateTime.Now.Year, dateTimePicker1.Value.Month)}'", true);
+                principalForm.LoadTable($"SELECT Id, Tytuł, Czas, Data, Opis, Plik FROM ListaDziel WHERE Data >= '{dateTimePicker1.Value.Year}-{dateTimePicker1.Value.Month}-01' AND Data <= '{dateTimePicker1.Value.Year}-{dateTimePicker1.Value.Month}-{DateTime.DaysInMonth(dateTimePicker1.Value.Year, dateTimePicker1.Value.Month)}'", true);
                 principalForm.CalculateSzczegoly(dateTimePicker1.Value.Month);
                 principalForm.FilterFill(DateTime.Now.Year, true);
                 principalForm.GetData();
@@ -126,7 +138,13 @@ namespace PrawaAutorskie
             {
                 textBox1.Text = principalForm.ReadSQL($"SELECT Tytuł FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
                 textBox2.Text = principalForm.ReadSQL($"SELECT Czas FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
-                dateTimePicker1.Value = Convert.ToDateTime(principalForm.ReadSQL($"SELECT Data FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
+
+                string dataValue = principalForm.ReadSQL($"SELECT Data FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
+                if (DateTime.TryParse(dataValue, out DateTime parsedData))
+                {
+                    dateTimePicker1.Value = parsedData;
+                }
+
                 richTextBox1.Text = principalForm.ReadSQL($"SELECT Opis FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString);
                 dataGridView1.Rows.Clear();
                 dataGridView1.Rows.Add("baza danych", principalForm.ReadSQL($"SELECT Plik FROM ListaDziel WHERE Id = '{_guid}'", Form1.initialcatalogConnectionString));
@@ -143,9 +161,36 @@ namespace PrawaAutorskie
 
         private void UpdateItem(Guid _guid)
         {
+            if (!int.TryParse(textBox2.Text, out int czas))
+            {
+                SystemSounds.Hand.Play();
+                MessageBox.Show("Pole Czas musi być liczbą całkowitą", "Błąd");
+                return;
+            }
+
             if (dataGridView1.Rows[0].Cells[0].Value.ToString() == "baza danych")
             {
-                principalForm.ExecuteSQLStmt($"UPDATE ListaDziel SET Tytuł='{textBox1.Text}', Czas ='{textBox2.Text}',Data ='{dateTimePicker1.Value}',Opis ='{richTextBox1.Text}' WHERE Id ='{_guid}'", Form1.initialcatalogConnectionString);
+                try
+                {
+                    using (var connection = new SqlConnection(Form1.initialcatalogConnectionString))
+                    {
+                        connection.Open();
+                        using (var cmd = new SqlCommand("UPDATE ListaDziel SET Tytuł=@Tytul, Czas=@Czas, Data=@Data, Opis=@Opis WHERE Id=@Id", connection))
+                        {
+                            cmd.Parameters.AddWithValue("@Tytul", textBox1.Text);
+                            cmd.Parameters.AddWithValue("@Czas", czas);
+                            cmd.Parameters.AddWithValue("@Data", dateTimePicker1.Value.Date);
+                            cmd.Parameters.AddWithValue("@Opis", richTextBox1.Text);
+                            cmd.Parameters.AddWithValue("@Id", _guid);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (SqlException ae)
+                {
+                    SystemSounds.Hand.Play();
+                    MessageBox.Show(ae.Message.ToString(), "Błąd");
+                }
             }
             else
             {
@@ -166,9 +211,15 @@ namespace PrawaAutorskie
                         try
                         {
                             connection.Open();
-                            using (cmd = new SqlCommand($"UPDATE ListaDziel SET Tytuł='{textBox1.Text}', Czas ='{textBox2.Text}',Data ='{dateTimePicker1.Value}',Opis ='{richTextBox1.Text}',PlikDirect =@File,Plik ='{dataGridView1.Rows[0].Cells[1].Value}' WHERE Id ='{_guid}'", connection))
+                            using (cmd = new SqlCommand("UPDATE ListaDziel SET Tytuł=@Tytul, Czas=@Czas, Data=@Data, Opis=@Opis, PlikDirect=@File, Plik=@Plik WHERE Id=@Id", connection))
                             {
+                                cmd.Parameters.AddWithValue("@Tytul", textBox1.Text);
+                                cmd.Parameters.AddWithValue("@Czas", czas);
+                                cmd.Parameters.AddWithValue("@Data", dateTimePicker1.Value.Date);
+                                cmd.Parameters.AddWithValue("@Opis", richTextBox1.Text);
                                 cmd.Parameters.Add("@File", SqlDbType.VarBinary, file.Length).Value = file;
+                                cmd.Parameters.AddWithValue("@Plik", dataGridView1.Rows[0].Cells[1].Value?.ToString() ?? string.Empty);
+                                cmd.Parameters.AddWithValue("@Id", _guid);
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -184,7 +235,7 @@ namespace PrawaAutorskie
                     SystemSounds.Hand.Play();
                     MessageBox.Show("Nie można dodać dzieła", "Błąd");
                 }
-            }          
+            }
         }
 
         void FillPodobne(Guid _guid)

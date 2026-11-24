@@ -186,10 +186,12 @@ namespace PrawaAutorskie
                 comboBox4.SelectedIndex = _month -1;
                 textBox1.Text = "70";
                 textBox2.Text = ((160 - (GetDniWolne(_month) * 8)) * Convert.ToInt32(textBox1.Text) / 100).ToString();
-                textBox3.Text = (Convert.ToInt32(textBox2.Text) - Convert.ToInt32(ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString))).ToString();
+                int sumaCzasu = 0;
+                int.TryParse(ReadSQL($"SELECT ISNULL(SUM(Czas), 0) as sum_czas FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString), out sumaCzasu);
+                textBox3.Text = (Convert.ToInt32(textBox2.Text) - sumaCzasu).ToString();
                 textBox4.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel WHERE Data >= '{DateTime.Now.Year}-{_month}-01' AND Data <= '{DateTime.Now.Year}-{_month}-{DateTime.DaysInMonth(DateTime.Now.Year, _month)}'", initialcatalogConnectionString);
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
-                textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
+                textBox7.Text = ReadSQL($"SELECT ISNULL(SUM(Czas), 0) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
 
             }
             catch
@@ -199,7 +201,7 @@ namespace PrawaAutorskie
                 textBox3.Text = textBox2.Text;
                 textBox4.Text = "0";
                 textBox6.Text = ReadSQL($"SELECT COUNT(*) FROM ListaDziel", initialcatalogConnectionString);
-                textBox7.Text = ReadSQL($"SELECT SUM(Czas) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
+                textBox7.Text = ReadSQL($"SELECT ISNULL(SUM(Czas), 0) as sum_czas FROM ListaDziel", initialcatalogConnectionString);
             }
             if (GetDniWolne(_month) > 0)
             {

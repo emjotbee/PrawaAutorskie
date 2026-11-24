@@ -43,8 +43,8 @@ namespace PrawaAutorskie
             SqlConnection cnn;
             connetionString = _connectionstring;
             cnn = new SqlConnection(connetionString);
-            try
-            {
+            //try
+            //{
                 // Start the task.
                 var task = Task.Factory.StartNew(() =>
                 {
@@ -60,12 +60,12 @@ namespace PrawaAutorskie
                 task.Wait();
                 load.Invoke(new Action(() => load.Close()));
                 return true;
-            }
-            catch (Exception ex)
-            {
-                load.Invoke(new Action(() => load.Close()));
-                return false;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    load.Invoke(new Action(() => load.Close()));
+            //    return false;
+            //}
         }
 
         void FillData(string _connetionstring)
